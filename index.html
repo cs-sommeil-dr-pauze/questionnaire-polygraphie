@@ -988,7 +988,7 @@ textarea.inp{min-height:110px;resize:vertical}
   <h3 class="sec"><span class="n">1</span>Créez votre fichier PDF</h3>
   <div class="actions"><button class="btn p" id="mkpdf" type="button">📄 Créer mon PDF</button></div>
   <div id="sendzone">
-   <div class="ok">✅ Votre PDF est prêt : <b id="pdfname"></b></div>
+   <div class="ok">✅ Votre PDF est prêt : <b id="pdfname"></b><div id="dlstate" style="font-size:14.5px;margin-top:6px"></div></div>
    <h3 class="sec"><span class="n">2</span>Enregistrez-le sur votre appareil</h3>
    <div class="actions">
     <a class="btn n" id="dl" download>⬇️ Enregistrer le PDF</a>
@@ -1378,6 +1378,7 @@ $("#mkpdf").onclick = async ()=>{
     const body = `Bonjour,\n\nVeuillez trouver ci-joint mon questionnaire du sommeil, complété avant ma consultation.\n\nNom et prénom : ${A.nom||""}\n${dn?"Date de naissance : "+dn+"\n":""}Fichier joint : ${pdfName}\n\nCordialement,\n${A.nom||""}`;
     $("#mail").href = `mailto:${CABINET.email}?subject=${encodeURIComponent(CABINET.objet)}&body=${encodeURIComponent(body)}`;
     $("#sendzone").classList.add("on");
+    downloaded = false; $("#dlstate").textContent = ""; $("#dl").click();   // téléchargement automatique
     $("#sendzone").scrollIntoView({behavior:"smooth",block:"start"});
   }catch(err){
     console.error(err);
@@ -1385,6 +1386,14 @@ $("#mkpdf").onclick = async ()=>{
     await buildPages(); setTimeout(()=>print(),600);
   }finally{ btn.disabled=false; btn.textContent="📄 Recréer mon PDF"; }
 };
+let downloaded = false;
+$("#dl").addEventListener("click", ()=>{
+  downloaded = true;
+  $("#dlstate").innerHTML = "📥 Le PDF a été téléchargé sur votre appareil : dossier <b>« Téléchargements »</b> (ou <b>« Fichiers »</b> sur iPhone). Si vous ne le trouvez pas, touchez « Enregistrer à nouveau ».";
+  $("#dl").textContent = "⬇️ Enregistrer à nouveau";
+});
+// sécurité : si le PDF n'a pas encore été téléchargé, il l'est au moment d'ouvrir Doctolib ou l'e-mail
+["#doctolib","#mail"].forEach(s=>$(s).addEventListener("click", ()=>{ if(pdfBlob && !downloaded) $("#dl").click(); }));
 $("#view").onclick = ()=>{ if(pdfBlob && !window.open($("#dl").href,"_blank")) location.href=$("#dl").href; };
 $("#share").onclick = async ()=>{
   try{ await navigator.share({files:[new File([pdfBlob],pdfName,{type:"application/pdf"})],title:"Questionnaire avant consultation",text:"Livret de questionnaires avant consultation – "+(A.nom||"")}); }
