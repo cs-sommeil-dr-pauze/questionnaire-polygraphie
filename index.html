@@ -509,6 +509,9 @@ textarea.inp{min-height:110px;resize:vertical}
 .unit span{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px}
 .calc{margin-top:10px;font-size:14.5px;color:var(--muted)}
 .calc b{color:var(--navy)}
+.hrow{display:grid;grid-template-columns:190px 1fr 1fr;gap:12px;align-items:end;margin-bottom:10px}
+.hrow .hl{font-weight:500;color:var(--navy);padding-bottom:12px}
+@media (max-width:600px){.hrow{grid-template-columns:1fr 1fr}.hrow .hl{grid-column:1/-1;padding-bottom:0}}
 .sub{margin-top:10px;display:none}
 .sub.on{display:block}
 .sub.grid2.on{display:grid}
@@ -869,6 +872,15 @@ textarea.inp{min-height:110px;resize:vertical}
    </div>
    <div class="calc" id="imc"></div>
   </div>
+  <div class="q"><div class="ql">Vos horaires de sommeil habituels <span class="hint">(heures approximatives)</span></div>
+   <div class="hrow"><span class="hl">En semaine</span>
+    <div class="field"><label for="f_cs">Coucher</label><input id="f_cs" class="inp" type="time" step="900" data-field="couch_sem"></div>
+    <div class="field"><label for="f_ls">Lever</label><input id="f_ls" class="inp" type="time" step="900" data-field="lever_sem"></div></div>
+   <div class="hrow"><span class="hl">Week-end / jours de repos</span>
+    <div class="field"><label for="f_cw">Coucher</label><input id="f_cw" class="inp" type="time" step="900" data-field="couch_we"></div>
+    <div class="field"><label for="f_lw">Lever</label><input id="f_lw" class="inp" type="time" step="900" data-field="lever_we"></div></div>
+   <div class="calc" id="tst"></div>
+  </div>
   <div class="q"><div class="ql">Ronflez-vous ?</div><div class="chips" data-name="ronfle" data-opts="Non|Oui, légèrement|Oui, fortement|Je ne sais pas"></div></div>
   <div class="q"><div class="ql">Quelqu’un a-t-il constaté des arrêts respiratoires pendant votre sommeil ?</div><div class="chips" data-name="apnees" data-opts="Non|Oui|Je ne sais pas"></div></div>
   <div class="q"><div class="ql">Réveils avec sensation d’étouffement ou de suffocation ?</div><div class="chips" data-name="etouff" data-opts="Non|Oui"></div></div>
@@ -884,6 +896,9 @@ textarea.inp{min-height:110px;resize:vertical}
   <div class="phead"><img data-img="ap" alt="Dr Antoine Pauze"><div class="pt"><h2>Antécédents et traitements</h2><div class="divider"><span></span></div></div></div>
   <div class="q"><div class="ql">Avez-vous l’une de ces maladies ? <span class="hint">(plusieurs réponses possibles)</span></div>
    <div class="chips multi" data-name="atcd" data-multi="1" data-excl="Aucune" data-opts="HTA (hypertension artérielle)|Diabète|Fibrillation atriale / trouble du rythme|Insuffisance cardiaque|Infarctus / maladie coronarienne|AVC / AIT|BPCO / maladie respiratoire chronique|Aucune"></div></div>
+  <div class="q"><div class="ql">Y a-t-il des cas d’apnée du sommeil dans votre famille ? <span class="hint">(parents, frères et sœurs, enfants)</span></div>
+   <div class="chips" data-name="atcdfam" data-opts="Non|Oui|Je ne sais pas"></div>
+   <div class="sub" data-show="atcdfam=Oui"><input class="inp" data-field="atcdfam_detail" placeholder="Qui ? (ex. : père, sœur…)"></div></div>
   <div class="q"><div class="ql">Prenez-vous régulièrement un traitement pour dormir, un anxiolytique ou un morphinique ?</div>
    <div class="chips" data-name="ttt" data-opts="Non|Oui"></div>
    <div class="sub" data-show="ttt=Oui"><input class="inp" data-field="ttt_detail" placeholder="Préciser le(s) médicament(s) et la dose"></div></div>
@@ -1166,6 +1181,10 @@ document.addEventListener("input", e=>{
 function sum(keys){ let s=0,n=0; keys.forEach(k=>{ if(typeof A[k]==="number"){ s+=A[k]; n++; } }); return {s,n,t:keys.length}; }
 const EPK = EPW.map((_,i)=>"ep"+(i+1)), HK = HAM.map((_,i)=>"h"+(i+1));
 function age(){ if(!A.ddn) return null; const d=new Date(A.ddn), t=new Date(); if(isNaN(d)) return null; let a=t.getFullYear()-d.getFullYear(); if(t.getMonth()<d.getMonth()||(t.getMonth()===d.getMonth()&&t.getDate()<d.getDate())) a--; return a>=0&&a<120?a:null; }
+// durée coucher → lever en minutes (passage de minuit géré)
+function dur(c,l){ if(!c||!l) return null; const [ch,cm]=c.split(":").map(Number), [lh,lm]=l.split(":").map(Number); let d=(lh*60+lm)-(ch*60+cm); if(d<=0) d+=1440; return d>=60&&d<=20*60 ? d : null; }
+const fmtDur = m => `${Math.floor(m/60)} h ${String(Math.round(m%60)).padStart(2,"0")}`;
+function sleepTimes(){ const s=dur(A.couch_sem,A.lever_sem), w=dur(A.couch_we,A.lever_we); return {s, w, moy: s!=null&&w!=null ? (5*s+2*w)/7 : (s ?? w)}; }
 function imc(){ const p=parseFloat(String(A.poids||"").replace(",",".")), t=parseFloat(String(A.taille||"").replace(",","."))/100; return p>0&&t>0.8 ? p/(t*t) : null; }
 function epwInt(s){ return s<=10?"somnolence normale":s<=15?"somnolence diurne modérée":"somnolence diurne sévère"; }
 function isiInt(s){ return s<=7?"pas d’insomnie cliniquement significative":s<=14?"insomnie sub-clinique (légère)":s<=21?"insomnie clinique modérée":"insomnie clinique sévère"; }
@@ -1225,6 +1244,7 @@ function refresh(fromInput){
   const h=sum(HK); $("#ham_tot").textContent = h.n? h.s : "–";
   $("#suicalert").classList.toggle("on", (A.h3||0)>=1);
   $("#drivealert").classList.toggle("on", A.lutte==="Régulièrement" || A.accident==="Oui");
+  const st=sleepTimes(); $("#tst").innerHTML = st.moy!=null ? `Temps de sommeil moyen estimé (coucher → lever) : <b>${fmtDur(st.moy)}</b>${st.s!=null&&st.w!=null?` <span class="hint">(semaine ${fmtDur(st.s)} · week-end ${fmtDur(st.w)})</span>`:""}` : "";
   const m=imc(); $("#imc").innerHTML = m? `Indice de masse corporelle : <b>${m.toFixed(1).replace(".",",")} kg/m²</b>` : "";
   $("#h_nom").textContent = A.nom || "…"; $("#h_date").textContent = new Date().toLocaleDateString("fr-FR");
   const ag=age(); $("#h_age").textContent = ag ?? "…";
@@ -1311,10 +1331,14 @@ function reportBlocks(){
     ["Motif de consultation",`<span style="white-space:pre-wrap">${fmt(A.motif)}</span>`]])}</div>`);
   B.push(`<div class="rb"><h4>Votre sommeil</h4>${kv([
     ["Poids / taille / tour de cou",`${fmt(A.poids)} kg · ${fmt(A.taille)} cm · ${fmt(A.cou)} cm`],
+    ["IMC (calculé)", m ? `<b>${m.toFixed(1).replace(".",",")} kg/m²</b> – ${imcInt(m)}` : fmt(null)],
+    ["Horaires coucher → lever", `Semaine : ${A.couch_sem||A.lever_sem ? fmt(A.couch_sem)+" → "+fmt(A.lever_sem) : fmt(null)} · Week-end : ${A.couch_we||A.lever_we ? fmt(A.couch_we)+" → "+fmt(A.lever_we) : fmt(null)}`],
+    ["Temps de sommeil moyen estimé", (()=>{ const st=sleepTimes(); return st.moy!=null ? `<b>${fmtDur(st.moy)}</b>${st.s!=null&&st.w!=null?` (semaine ${fmtDur(st.s)}, week-end ${fmtDur(st.w)} ; moyenne 5 j + 2 j)`:""}` : fmt(null); })()],
     ["Ronflement",fmt(A.ronfle)],["Arrêts respiratoires constatés",fmt(A.apnees)],["Réveils avec étouffement",fmt(A.etouff)],
     ["Sommeil réparateur",fmt(A.repar)],["Au réveil",fmt(A.reveil)],["Nycturie",fmt(A.nycturie)]])}</div>`);
   B.push(`<div class="rb"><h4>Antécédents et traitements</h4>${kv([
-    ["Maladies",fmt(A.atcd)],["Hypnotique / anxiolytique / morphinique",fmt(A.ttt)+(A.ttt==="Oui"&&A.ttt_detail?" : "+esc(A.ttt_detail):"")],
+    ["Maladies",fmt(A.atcd)],
+    ["Antécédents familiaux d’apnée du sommeil",fmt(A.atcdfam)+(A.atcdfam==="Oui"&&A.atcdfam_detail?" : "+esc(A.atcdfam_detail):"")],["Hypnotique / anxiolytique / morphinique",fmt(A.ttt)+(A.ttt==="Oui"&&A.ttt_detail?" : "+esc(A.ttt_detail):"")],
     ["Examen du sommeil antérieur",fmt(A.examen)+(A.examen_detail?" ("+esc(A.examen_detail)+")":"")],
     ["Traitement antérieur du SAOS",fmt(A.traite)+(A.traite_autre?" ("+esc(A.traite_autre)+")":"")]])}</div>`);
   B.push(`<div class="rb"><h4>Somnolence et conduite</h4>${kv([
