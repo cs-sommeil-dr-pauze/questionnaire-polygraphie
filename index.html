@@ -678,6 +678,11 @@ textarea.inp{min-height:110px;resize:vertical}
 .btn.p{background:var(--pink);color:#fff;box-shadow:0 4px 14px rgba(42,79,143,.28)}
 .btn.p:hover{background:#1d3a6e}
 .btn.n{background:var(--navy);color:#fff}
+.dict{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:8px}
+.dict .btn{padding:10px 18px;font-size:15px}
+.dict .btn.rec{background:#d93025;color:#fff;border-color:#d93025;animation:recp 1.2s infinite}
+@keyframes recp{50%{box-shadow:0 0 0 6px rgba(217,48,37,.18)}}
+.dict .live{font-size:14px;color:var(--muted);font-style:italic}
 .btn.g{background:#fff;color:var(--navy);border:1.5px solid #cfd8e6}
 .btn:disabled{opacity:.6;cursor:wait}
 .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px}
@@ -841,6 +846,7 @@ textarea.inp{min-height:110px;resize:vertical}
   </div>
   <div class="q"><label for="f_motif">Pourquoi consultez-vous ?</label>
    <textarea id="f_motif" class="inp" data-field="motif" placeholder="Ex. : je ronfle fort, ma conjointe a remarqué des pauses respiratoires, je suis fatigué(e) dans la journée…"></textarea>
+   <div class="dict"><button class="btn g" id="dictbtn" type="button">🎤 Dicter ma réponse</button><span class="live" id="dictlive"></span></div>
   </div>
   <div class="box">📄 Si vous disposez d’un <b>courrier médical</b>, d’une <b>ancienne polygraphie / polysomnographie</b> ou d’un <b>compte rendu de traitement par PPC</b>, merci de l’apporter ou de le transmettre avant la consultation.</div>
  </div>
@@ -1151,6 +1157,38 @@ document.addEventListener("click", e=>{
     if(nx && window.innerWidth<760){ setTimeout(()=>{ const y = nx.getBoundingClientRect().top + scrollY - 130; if(nx.getBoundingClientRect().top > innerHeight*0.62) scrollTo({top:y,behavior:"smooth"}); },160); }
   }
 });
+// Dictée vocale du motif (reconnaissance vocale du navigateur ; le patient est prévenu avant le 1er usage)
+(function(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition, btn=$("#dictbtn"), live=$("#dictlive"), ta=$("#f_motif");
+  if(!SR){ btn.style.display="none"; live.innerHTML="Pour dicter, utilisez la touche 🎤 de votre clavier (téléphone) ou <b>Windows + H</b> (ordinateur)."; return; }
+  let rec=null;
+  const stop=()=>{ if(rec){ const r=rec; rec=null; r.stop(); } btn.classList.remove("rec"); btn.textContent="🎤 Dicter ma réponse"; live.textContent=""; };
+  btn.addEventListener("click", ()=>{
+    if(rec){ stop(); return; }
+    if(!A._dictOk){
+      if(!confirm("Dictée vocale\n\nVotre voix sera transcrite en texte par le service de reconnaissance vocale de votre navigateur (Google, Apple ou Microsoft selon votre appareil). Le texte s’affiche ensuite dans le champ et vous pouvez le corriger.\n\nSi vous préférez, vous pouvez simplement écrire votre réponse.\n\nActiver la dictée ?")) return;
+      A._dictOk=1; save();
+    }
+    rec=new SR(); rec.lang="fr-FR"; rec.continuous=true; rec.interimResults=true;
+    rec.onresult=ev=>{
+      let fin="", tmp="";
+      for(let j=ev.resultIndex;j<ev.results.length;j++){ const t=ev.results[j][0].transcript; if(ev.results[j].isFinal) fin+=t; else tmp+=t; }
+      if(fin.trim()){
+        let v=ta.value.replace(/\s+$/,""), t=fin.trim();
+        if(!v || /[.!?…]$/.test(v)) t=t.charAt(0).toUpperCase()+t.slice(1);
+        ta.value=(v?v+" ":"")+t;
+        ta.dispatchEvent(new Event("input",{bubbles:true}));
+      }
+      live.textContent = tmp ? "… "+tmp : "Je vous écoute…";
+    };
+    rec.onerror=ev=>{ const m=ev.error==="not-allowed"||ev.error==="service-not-allowed" ? "Micro refusé : autorisez le micro dans votre navigateur, ou écrivez votre réponse." : ev.error==="no-speech" ? "" : "Dictée indisponible pour le moment : vous pouvez écrire votre réponse."; stop(); if(m) toast(m); };
+    rec.onend=()=>{ if(rec){ try{ rec.start(); }catch(e){ stop(); } } };   // relance après une pause (Chrome coupe au silence)
+    try{ rec.start(); btn.classList.add("rec"); btn.textContent="⏹ Arrêter la dictée"; live.textContent="Je vous écoute…"; }
+    catch(e){ stop(); toast("Dictée indisponible : vous pouvez écrire votre réponse."); }
+  });
+  window.addEventListener("popstate", stop);
+  document.addEventListener("click", e=>{ if(e.target.closest("#next,#prev")) stop(); });
+})();
 document.addEventListener("input", e=>{
   const ci = e.target.dataset.copy;
   if(ci!==undefined){ (A.copies ||= [])[+ci][e.target.dataset.cf] = e.target.value; save(); return; }
