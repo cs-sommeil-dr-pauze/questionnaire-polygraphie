@@ -717,6 +717,10 @@ textarea.inp{min-height:110px;resize:vertical}
 .rb{margin-bottom:12px}
 .rb h4{margin:0 0 6px;font-size:13px;color:#fff;background:var(--navy);padding:5px 10px;border-radius:6px;font-weight:600}
 .rb h4.pkh{background:var(--pink)}
+.rsyn{border:1.5px solid var(--navy);border-radius:8px;padding:8px 12px;font-size:11.5px;line-height:1.55;color:#222;background:#fbfcfe}
+.rsyn p{margin:0 0 4px}.rsyn p:last-child{margin:0}
+.rsyn .lb{color:var(--navy);font-weight:700}
+.rsyn .al{color:#a01818}
 .kv{display:grid;grid-template-columns:200px 1fr;border:1px solid #eee;border-radius:6px;overflow:hidden}
 .kv div{padding:4px 8px;border-bottom:1px solid #f1f1f1}
 .kv div:nth-child(odd){background:#f2f6fb;color:#555}
@@ -1280,6 +1284,78 @@ document.addEventListener("click", e=>{ const a=e.target.closest("[data-go]"); i
 const fmt = v => v==null||v===""||(Array.isArray(v)&&!v.length) ? `<span style="color:#bbb">—</span>` : esc(Array.isArray(v)?v.join(", "):v);
 function kv(rows){ return `<div class="kv">${rows.map(([k,v])=>`<div>${k}</div><div>${v}</div>`).join("")}</div>`; }
 function circ(k,max){ let s=""; for(let v=0;v<=max;v++) s+=`<td class="c"><span class="rc${A[k]===v?" on":""}">${v}</span></td>`; return s; }
+// Synthèse clinique rédigée automatiquement à partir des réponses (en tête du PDF)
+function synthese(){
+  const e=sum(EPK), i=sum(ISI_KEYS), h=sum(HK), m=imc(), ag=age(), sb=stopbang(), st=sleepTimes();
+  const B=s=>`<b>${s}</b>`, lc=s=>/^.[a-zà-ÿ]/.test(s)?s.charAt(0).toLowerCase()+s.slice(1):s;
+  const EPS=["lecture","télévision","lieu public","passager en voiture","allongé l’après-midi","conversation","après le déjeuner","voiture à l’arrêt"];
+  const list=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" et "+a[a.length-1];
+  const fem=A.sexe==="Une femme", ee=fem?"e":"";
+  const P=[];
+  // 1. Qui, adressé par qui, pourquoi
+  let who=(A.sexe?(fem?"Patiente":"Patient"):"Patient(e)")+(ag!=null?` de ${B(ag+" ans")}`:"");
+  if(A.adresse==="Initiative personnelle") who+=`, venu${ee} de sa propre initiative`;
+  else if(A.adresse){
+    const qui={"Médecin traitant":"son médecin traitant","Cardiologue":"son cardiologue","ORL":"son ORL","Pneumologue":"son pneumologue","Dentiste":"son dentiste"}[A.adresse] || (A.adresse_autre?esc(A.adresse_autre):"un confrère");
+    const nom=[A.adresse_nom,A.adresse_ville].filter(Boolean).map(esc).join(", ");
+    who+=`, adressé${ee} par ${B(qui)}${nom?` (${nom})`:""}`;
+  }
+  let mot=(A.motif||"").trim().replace(/\s+/g," ");
+  if(mot.length>260) mot=mot.slice(0,257).replace(/\s\S*$/,"")+"…";
+  mot=mot.replace(/[\s.;,]+$/,"");
+  P.push(`<span class="lb">Motif :</span> ${who}${mot?` pour : « ${B(esc(mot))} »`:""}.`);
+  // 2. Plaintes nocturnes
+  const nuit=[];
+  if(A.ronfle==="Oui, fortement") nuit.push(B("ronflement fort")); else if(A.ronfle==="Oui, légèrement") nuit.push("ronflement léger");
+  if(A.apnees==="Oui") nuit.push(B("arrêts respiratoires constatés par l’entourage"));
+  if(A.etouff==="Oui") nuit.push(B("réveils avec sensation d’étouffement"));
+  if(A.nycturie==="2 fois"||A.nycturie==="3 fois ou plus") nuit.push(`nycturie (${B(A.nycturie)} par nuit)`);
+  const ins=[["isi1a","endormissement"],["isi1b","réveils nocturnes"],["isi1c","réveil précoce"]].filter(([k])=>A[k]>=3).map(([k,t])=>`${t} (${A[k]}/4)`);
+  if(ins.length) nuit.push(`difficultés marquées : ${B(list(ins))}`);
+  if(st.moy!=null && st.moy<6*60) nuit.push(`temps passé au lit court (${B(fmtDur(st.moy))} en moyenne)`);
+  if(st.moy!=null && st.moy>9.5*60) nuit.push(`temps passé au lit long (${B(fmtDur(st.moy))} en moyenne)`);
+  if(nuit.length) P.push(`<span class="lb">La nuit :</span> ${list(nuit)}.`);
+  // 3. Retentissement diurne
+  const jour=[];
+  if(A.repar==="Non") jour.push(B("sommeil non réparateur"));
+  const rv=(A.reveil||[]).filter(x=>x!=="Aucun").map(lc);
+  if(rv.length) jour.push(`au réveil : ${list(rv)}`);
+  if(e.n) jour.push(`Epworth ${e.s>10?B(e.s+"/24 – "+epwInt(e.s)):e.s+"/24 ("+epwInt(e.s)+")"}`);
+  const epHi=EPS.filter((t,j)=>A["ep"+(j+1)]===3);
+  if(epHi.length) jour.push(`fort risque d’endormissement (3/3) : ${list(epHi)}`);
+  if(A.isi3>=3) jour.push(B("retentissement important sur le fonctionnement quotidien")+` (ISI q.3 : ${A.isi3}/4)`);
+  if(i.n && i.s>=15) jour.push(`ISI ${B(i.s+"/28 – "+isiInt(i.s))}`);
+  else if(i.n) jour.push(`ISI ${i.s}/28 (${isiInt(i.s)})`);
+  if(jour.length) P.push(`<span class="lb">Le jour :</span> ${jour.join(" ; ")}.`);
+  const vol=[];
+  if(A.lutte==="Régulièrement") vol.push(B("lutte régulièrement contre le sommeil au volant"));
+  if(A.accident==="Oui") vol.push(B("accident ou quasi-accident par endormissement"));
+  if(A.conduitepro==="Oui") vol.push(B("conducteur professionnel")+(A.conduitepro_detail?` (${esc(A.conduitepro_detail)})`:""));
+  if(vol.length) P.push(`<span class="lb al">Conduite :</span> <span class="al">${list(vol)}.</span>`);
+  // 4. Humeur
+  const hHi=HAM.map((x,j)=>[x[0],A["h"+(j+1)],j]).filter(x=>x[1]>=3 && ![2,3,4,5].includes(x[2])).map(x=>`${lc(x[0])} (${x[1]}/4)`);
+  const hum=[];
+  if(h.n) hum.push(`Hamilton ${B(h.s+"/68")}`);
+  if(hHi.length) hum.push(`items cotés 3–4 : ${B(list(hHi))}`);
+  if((A.h3||0)>=1) hum.push(`<span class="al">${B("idées suicidaires cotées "+A.h3+"/4 – à évaluer en priorité")}</span>`);
+  if(hum.length) P.push(`<span class="lb">Humeur :</span> ${hum.join(" ; ")}.`);
+  // 5. Terrain
+  const ter=[];
+  if(m) ter.push(m>=30?B(`IMC ${m.toFixed(1).replace(".",",")} (${imcInt(m)})`):`IMC ${m.toFixed(1).replace(".",",")} (${imcInt(m)})`);
+  const cou=parseFloat(String(A.cou||"").replace(",","."));
+  if(cou>40) ter.push(`tour de cou ${B(cou+" cm")}`);
+  const at=(A.atcd||[]).filter(x=>x!=="Aucune").map(x=>x.replace(/ \(.*\)/,""));
+  if(at.length) ter.push(B(list(at.map(lc))));
+  if(A.atcdfam==="Oui") ter.push(`${B("antécédent familial d’apnée du sommeil")}${A.atcdfam_detail?` (${esc(A.atcdfam_detail)})`:""}`);
+  if(A.ttt==="Oui") ter.push(`traitement sédatif : ${B(A.ttt_detail?esc(A.ttt_detail):"oui")}`);
+  if(A.examen && A.examen!=="Non" && A.examen!=="Je ne sais pas") ter.push(`${lc(A.examen)} antérieure${A.examen_detail?` (${esc(A.examen_detail)})`:""}`);
+  const tr=(A.traite||[]).filter(x=>x!=="Non");
+  if(tr.length) ter.push(`déjà traité${ee} : ${B(list(tr.map(x=>x==="Autre"&&A.traite_autre?esc(A.traite_autre):x)))}`);
+  ter.push(`STOP-Bang ${sb.s>=5?B(sb.s+"/8 – "+sb.risk):sb.s+"/8 ("+sb.risk+")"}`);
+  P.push(`<span class="lb">Terrain :</span> ${list(ter)}.`);
+  return `<div class="rsyn">${P.map(p=>`<p>${p}</p>`).join("")}</div>`;
+}
+
 function reportBlocks(){
   const e=sum(EPK), i=sum(ISI_KEYS), h=sum(HK), m=imc(), ag=age(), sb=stopbang();
   const B=[];
@@ -1292,7 +1368,8 @@ function reportBlocks(){
     <div style="grid-column:span 2"><small>Nom et prénom</small><b>${fmt(A.nom)}</b></div>
     <div><small>Date de naissance${ag!=null?" (âge)":""}</small><b>${dn}${ag!=null?` (${ag} ans)`:""}</b></div>
     <div><small>Sexe · Rempli le</small><b>${A.sexe?esc(A.sexe.replace("Un ","").replace("Une ","")):"—"} · ${new Date().toLocaleDateString("fr-FR")}</b></div></div>
-   <h4 class="pkh">Synthèse des scores</h4>
+   <h4>Synthèse globale</h4>${synthese()}
+   <h4 class="pkh" style="margin-top:10px">Synthèse des scores</h4>
    <div class="rtiles">
     <div><small>Epworth</small><b>${e.n?e.s:"—"}<span style="font-size:11px;color:#888"> /24</span></b><i>${e.n?epwInt(e.s):""}</i>${part(e)}</div>
     <div><small>ISI (insomnie)</small><b>${i.n?i.s:"—"}<span style="font-size:11px;color:#888"> /28</span></b><i>${i.n?isiInt(i.s):""}</i>${part(i)}</div>
