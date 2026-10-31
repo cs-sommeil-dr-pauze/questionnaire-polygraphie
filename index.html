@@ -688,6 +688,10 @@ textarea.inp{min-height:110px;resize:vertical}
 .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px}
 #sendzone{display:none;margin-top:18px}
 #sendzone.on{display:block}
+#mkstate{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--navy);margin:14px 0}
+.pvw{display:flex;gap:12px;overflow-x:auto;padding:10px;background:#eef0f4;border-radius:14px;margin:10px 0 4px;scroll-snap-type:x mandatory}
+.pvw img{flex:none;width:min(260px,70vw);border-radius:4px;box-shadow:0 2px 10px rgba(0,0,0,.18);background:#fff;scroll-snap-align:start;cursor:zoom-in}
+.secr{border:1.5px solid #f0c36d;background:#fff8e6;border-radius:14px;padding:12px 16px;margin-top:14px;font-size:15px}
 .sendopts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
 .sendopt{border:1.5px solid var(--line);border-radius:16px;padding:16px 18px;background:var(--rose3)}
 .sendopt .t{font-weight:600;color:var(--navy);font-size:17px;margin-bottom:12px}
@@ -992,14 +996,17 @@ textarea.inp{min-height:110px;resize:vertical}
   <p>Merci d’avoir pris le temps de remplir ce livret. Voici le récapitulatif de vos scores :</p>
   <div class="tiles" id="tiles"></div>
   <div id="missing"></div>
-  <h3 class="sec"><span class="n">1</span>Créez votre fichier PDF</h3>
-  <div class="actions"><button class="btn p" id="mkpdf" type="button">📄 Créer mon PDF</button></div>
+  <div id="mkstate"><span class="spin">⏳</span> Création de votre PDF en cours…</div>
+  <button class="btn p" id="mkpdf" type="button" style="display:none">📄 Créer mon PDF</button>
   <div id="sendzone">
-   <div class="ok">✅ Votre PDF est prêt : <b id="pdfname"></b><div id="dlstate" style="font-size:14.5px;margin-top:6px"></div></div>
-   <h3 class="sec"><span class="n">2</span>Enregistrez-le sur votre appareil</h3>
+   <h3 class="sec"><span class="n">1</span>Votre PDF est prêt</h3>
+   <div class="ok">✅ <b id="pdfname"></b><div id="dlstate" style="font-size:14.5px;margin-top:6px"></div></div>
+   <div class="pvw" id="pvw" title="Aperçu de votre PDF"></div>
+   <div class="hint" style="margin-bottom:6px">Aperçu de votre PDF : faites défiler les pages. Touchez une page pour l’ouvrir en grand.</div>
+   <h3 class="sec"><span class="n">2</span>Téléchargez-le sur votre appareil</h3>
    <div class="actions">
-    <a class="btn n" id="dl" download>⬇️ Enregistrer le PDF</a>
-    <button class="btn g" id="view" type="button">👁️ Voir mon PDF</button>
+    <a class="btn n" id="dl" download>⬇️ Télécharger sur votre appareil</a>
+    <button class="btn g" id="view" type="button">👁️ Ouvrir mon PDF</button>
    </div>
    <h3 class="sec"><span class="n">3</span>Envoyez-le au cabinet avant la consultation</h3>
    <p style="margin-top:-4px">Il doit nous parvenir <b>avant le jour du rendez-vous</b> afin que le médecin puisse préparer votre consultation. Choisissez <b>l’une</b> des deux solutions :</p>
@@ -1007,7 +1014,7 @@ textarea.inp{min-height:110px;resize:vertical}
     <div class="sendopt">
      <div class="t">📅 Par Doctolib <span class="reco">recommandé</span></div>
      <a class="btn p" id="doctolib" href="https://www.doctolib.fr/account/appointments" target="_blank" rel="noopener">Ouvrir mon Doctolib</a>
-     <ol><li>Ouvrez votre <b>rendez-vous</b> avec le Dr Pauze.</li><li>Touchez <b>« Ajouter / partager un document »</b>.</li><li>Choisissez le PDF enregistré <span class="hint">(dossier Téléchargements ou Fichiers)</span>.</li></ol>
+     <ol><li>Ouvrez votre <b>rendez-vous</b> avec le Dr Pauze.</li><li>Touchez <b>« Ajouter / partager un document »</b>.</li><li>Choisissez le PDF téléchargé <span class="hint">(dossier Téléchargements ou Fichiers)</span>.</li></ol>
      <div class="hint">S’ouvre dans l’application Doctolib si elle est installée sur votre téléphone, sinon sur le site doctolib.fr.</div>
     </div>
     <div class="sendopt">
@@ -1018,6 +1025,7 @@ textarea.inp{min-height:110px;resize:vertical}
     </div>
    </div>
    <div class="actions" style="margin-top:10px"><button class="btn g" id="share" type="button" style="display:none">📤 Partager avec une autre application</button></div>
+   <div class="secr">📞 <b>Important :</b> si nous n’avons reçu votre PDF <b>ni par Doctolib, ni par e-mail</b>, le secrétariat pourra vous envoyer un message <b>quelques jours avant votre rendez-vous</b> pour vous le demander.</div>
   </div>
   <h3 class="sec" style="margin-top:34px;font-size:16px;color:var(--muted)">Ordinateur partagé ?</h3>
   <p class="hint" style="margin-top:-6px">Une fois le PDF envoyé, vous pouvez effacer vos réponses de cet appareil.</p>
@@ -1284,7 +1292,7 @@ function go(n, push=true){
   $("#prev").style.visibility = cur ? "visible" : "hidden";
   $("#next").style.display = cur===steps.length-1 ? "none" : "";
   $("#next").textContent = cur===0 ? "Commencer →" : cur===steps.length-2 ? "Terminer →" : "Suivant →";
-  if(cur===steps.length-1) buildEnd();
+  if(cur===steps.length-1){ buildEnd(); if(JSON.stringify(A)!==pdfFor) setTimeout(()=>$("#mkpdf").click(),350); }
   scrollTo(0,0);
   if(push) history.pushState({s:cur},"","#"+cur);
 }
@@ -1469,8 +1477,10 @@ async function buildPages(){
   return pages;
 }
 let pdfBlob=null, pdfName="";
+var pdfFor=null;   // réponses ayant servi au dernier PDF (var : utilisable dès le chargement)
 $("#mkpdf").onclick = async ()=>{
-  const btn=$("#mkpdf"); btn.disabled=true; btn.textContent="⏳ Création en cours…";
+  const btn=$("#mkpdf"); if(btn.disabled) return; btn.disabled=true; btn.style.display="none";
+  $("#mkstate").style.display=""; $("#sendzone").classList.remove("on"); $("#pvw").innerHTML="";
   try{
     const pages=await buildPages();
     if(document.fonts && document.fonts.ready) await document.fonts.ready;
@@ -1479,7 +1489,9 @@ $("#mkpdf").onclick = async ()=>{
     for(let j=0;j<pages.length;j++){
       const c=await html2canvas(pages[j],{scale:2,backgroundColor:"#ffffff",useCORS:true,logging:false,windowWidth:900});
       if(j) pdf.addPage();
-      pdf.addImage(c.toDataURL("image/jpeg",0.88),"JPEG",0,0,210,297,undefined,"FAST");
+      const jpg=c.toDataURL("image/jpeg",0.88);
+      pdf.addImage(jpg,"JPEG",0,0,210,297,undefined,"FAST");
+      const im=new Image(); im.src=jpg; im.alt=`Page ${j+1}`; $("#pvw").appendChild(im);
     }
     const n=(A.nom||"patient").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Za-z0-9]+/g,"_").replace(/^_|_$/g,"");
     pdfName=`Questionnaire_sommeil_${n}_${new Date().toISOString().slice(0,10)}.pdf`;
@@ -1492,23 +1504,25 @@ $("#mkpdf").onclick = async ()=>{
     const dn = A.ddn ? new Date(A.ddn).toLocaleDateString("fr-FR") : "";
     const body = `Bonjour,\n\nVeuillez trouver ci-joint mon questionnaire du sommeil, complété avant ma consultation.\n\nNom et prénom : ${A.nom||""}\n${dn?"Date de naissance : "+dn+"\n":""}Fichier joint : ${pdfName}\n\nCordialement,\n${A.nom||""}`;
     $("#mail").href = `mailto:${CABINET.email}?subject=${encodeURIComponent(CABINET.objet)}&body=${encodeURIComponent(body)}`;
-    $("#sendzone").classList.add("on");
+    $("#sendzone").classList.add("on"); $("#mkstate").style.display="none"; pdfFor=JSON.stringify(A);
     downloaded = false; $("#dlstate").textContent = ""; $("#dl").click();   // téléchargement automatique
     $("#sendzone").scrollIntoView({behavior:"smooth",block:"start"});
   }catch(err){
     console.error(err);
     toast("Création directe impossible : la fenêtre d’impression va s’ouvrir. Choisissez « Enregistrer au format PDF ».");
     await buildPages(); setTimeout(()=>print(),600);
-  }finally{ btn.disabled=false; btn.textContent="📄 Recréer mon PDF"; }
+    $("#mkstate").style.display="none"; btn.style.display=""; btn.textContent="📄 Réessayer de créer mon PDF";
+  }finally{ btn.disabled=false; }
 };
 let downloaded = false;
 $("#dl").addEventListener("click", ()=>{
   downloaded = true;
-  $("#dlstate").innerHTML = "📥 Le PDF a été téléchargé sur votre appareil : dossier <b>« Téléchargements »</b> (ou <b>« Fichiers »</b> sur iPhone). Si vous ne le trouvez pas, touchez « Enregistrer à nouveau ».";
-  $("#dl").textContent = "⬇️ Enregistrer à nouveau";
+  $("#dlstate").innerHTML = "📥 Le PDF a été téléchargé sur votre appareil : dossier <b>« Téléchargements »</b> (ou <b>« Fichiers »</b> sur iPhone). Si vous ne le trouvez pas, touchez « Télécharger à nouveau ».";
+  $("#dl").textContent = "⬇️ Télécharger à nouveau";
 });
 // sécurité : si le PDF n'a pas encore été téléchargé, il l'est au moment d'ouvrir Doctolib ou l'e-mail
 ["#doctolib","#mail"].forEach(s=>$(s).addEventListener("click", ()=>{ if(pdfBlob && !downloaded) $("#dl").click(); }));
+$("#pvw").addEventListener("click", e=>{ if(e.target.tagName==="IMG") $("#view").click(); });
 $("#view").onclick = ()=>{ if(pdfBlob && !window.open($("#dl").href,"_blank")) location.href=$("#dl").href; };
 $("#share").onclick = async ()=>{
   try{ await navigator.share({files:[new File([pdfBlob],pdfName,{type:"application/pdf"})],title:"Questionnaire avant consultation",text:"Livret de questionnaires avant consultation – "+(A.nom||"")}); }
@@ -1518,7 +1532,7 @@ $("#reset").onclick = ()=>{
   if(!confirm("Effacer toutes vos réponses de cet appareil ?")) return;
   A={}; try{ localStorage.removeItem(STORE); }catch(e){}
   $$(".step").forEach(s=>delete s.dataset.warned);
-  $("#sendzone").classList.remove("on"); refresh(); go(0); toast("Vos réponses ont été effacées.");
+  $("#sendzone").classList.remove("on"); pdfFor=null; refresh(); go(0); toast("Vos réponses ont été effacées.");
 };
 
 /* ======== Démarrage ======== */
