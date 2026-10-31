@@ -601,24 +601,6 @@ textarea.inp{min-height:110px;resize:vertical}
 .isitotal .a{font-weight:700;color:var(--navy);font-size:18px}
 .isitotal .b{font-size:14px;color:var(--muted)}
 .isitotal .v{font-size:26px;font-weight:700;color:var(--pink)}
-.mtx{margin:6px 0 0 46px;border-radius:12px;overflow:hidden}
-.mtx .mh,.mtx .mr{display:grid;grid-template-columns:1fr repeat(5,58px);align-items:center}
-.mtx .mh{background:var(--rose2);font-size:12.5px;font-weight:600;text-align:center;padding:8px 0}
-.mtx .mh div:first-child{text-align:left}
-.mtx .mr{border-bottom:1px solid #e6edf6;padding:8px 0}
-.mtx .mr .t{padding:0 10px;font-size:15px}
-.mtx .mr .num{width:36px;height:36px;font-size:14.5px;margin:auto}
-.mtx .mr.miss{background:#fffaf0}
-.mtx .other{grid-column:1/-1;padding:6px 10px 2px}
-@media (max-width:600px){
-  .mtx{margin-left:0}
-  .mtx .mh{display:none}
-  .mtx .mr{grid-template-columns:repeat(5,1fr);row-gap:8px}
-  .mtx .mr .t{grid-column:1/-1;padding:0 2px}
-  .mtx .mr .num{width:auto;height:auto;min-height:50px;border-radius:12px;margin:0 3px;padding:4px 0}
-  .mtx .mr .num small{display:block;font-size:10.5px;font-weight:400}
-  .mtx .mr .num.on small{color:#fff}
-}
 
 /* ---------- Hamilton ---------- */
 .hhead{display:grid;grid-template-columns:1fr 1.2fr;gap:20px;align-items:center;margin-bottom:16px}
@@ -949,7 +931,6 @@ textarea.inp{min-height:110px;resize:vertical}
   <p style="text-align:center;margin:0">Merci d’utiliser l’échelle ci-dessous pour répondre aux questions suivantes.<br><span class="pk">Touchez le chiffre correspondant à chacune des questions.</span></p>
   <div id="isi"></div>
   <div class="isitotal"><div><div class="a">SCORE TOTAL : <span class="v" id="isi_tot">–</span> <span style="color:var(--navy)">/ 28</span></div><div class="b">Calculé automatiquement (questions 1a, 1b, 1c, 2, 3, 4 et 5).</div></div><div class="b" id="isi_st"></div></div>
-  <div id="isi2"></div>
   <div class="box" style="text-align:center"><b>Note :</b> assurez-vous d’avoir répondu à toutes les questions.</div>
  </div>
 </section>
@@ -964,6 +945,7 @@ textarea.inp{min-height:110px;resize:vertical}
     <div>Ce questionnaire permet d’évaluer l’intensité des symptômes dépressifs actuels. Pour chaque item, cochez la réponse qui décrit le mieux votre état <span class="blue">DES 7 DERNIERS JOURS.</span><br><span style="color:#1677c8">Il n’y a pas de bonne ou mauvaise réponse : soyez le plus sincère possible.</span></div></div>
    <div class="id"><div><b>Nom / Prénom :</b> <span id="h_nom">…</span></div><div><b>Date :</b> <span id="h_date"></span></div><div><b>Âge :</b> <span id="h_age">…</span> ans</div></div>
   </div>
+  <div class="box" id="hpre" style="display:none;margin:0 0 12px">ℹ️ Les questions <b>4, 5 et 6</b> (insomnie) ont été <b>pré-remplies</b> d’après vos réponses à la question 1 de la page précédente. Vous pouvez les modifier si elles ne correspondent pas aux 7 derniers jours.</div>
   <div class="ham" id="ham"></div>
   <div class="hfoot">
    <div class="hscore"><svg width="44" height="44" viewBox="0 0 48 48"><circle cx="24" cy="24" r="23" fill="#17164d"/><rect x="15" y="12" width="18" height="24" rx="2" fill="none" stroke="#fff" stroke-width="2.2"/><rect x="19" y="9.5" width="10" height="5" rx="1.5" fill="#fff"/><path d="M19 21h10M19 26h10M19 31h6" stroke="#fff" stroke-width="2"/></svg>
@@ -1067,8 +1049,7 @@ const ISI = [
   {n:"5",t:"Jusqu’à quel point êtes-vous INQUIET(E) / PRÉOCCUPÉ(E) à propos de vos difficultés de sommeil ?",id:"isi5"}
 ];
 const ISI_KEYS = ["isi1a","isi1b","isi1c","isi2","isi3","isi4","isi5"];
-const ISI6 = ["Perturbations cognitives (pensées qui tournent dans la tête pendant la nuit)","Perturbations somatiques (tension musculaire, douleur)","Mauvaises habitudes de sommeil","Processus naturel de vieillissement (le sommeil peut devenir plus léger et fragmenté avec l’âge, avec des réveils plus fréquents ou plus précoces)","Stress"];
-const ISI7 = ["Fatigue pendant le jour (fatigué(e), épuisé(e), exténué(e), endormi(e), etc.)","Difficultés à fonctionner (diminution de la performance au travail / routine quotidienne, difficultés à se concentrer, problèmes de mémoire, etc.)","Problème d’humeur (irritable, tendu(e), nerveux(se), déprimé(e), anxieux(se), maussade, hostile, en colère, confus(e), etc.)","Autres (spécifiez, svp)"];
+const ISI2H = {isi1a:"h4", isi1b:"h5", isi1c:"h6"};
 const HAM = [
   ["Humeur dépriméE","Tristesse, moral bas, découragement, sensation de vide"],
   ["Sentiments de culpabilité","Vous sentez-vous coupable, inutile, responsable de problèmes ?"],
@@ -1117,13 +1098,6 @@ function scaleHTML(id,sat){
 }
 $("#isi").innerHTML = ISI.map(q=>`<div class="qh"><span class="n">${q.n}</span><span class="tx">${q.t}</span></div>`+
   (q.sub ? q.sub.map(s=>`<div class="subq">${s[1]}</div>`+scaleHTML(s[0])).join("") : scaleHTML(q.id,q.sat))).join("");
-function mtx(pref,items,title,n){
-  return `<div class="qh"><span class="n">${n}</span><span class="tx">${title}</span></div><div class="mtx"><div class="mh"><div></div>${ISI_L.map(l=>`<div>${l}</div>`).join("")}</div>`+
-   items.map((t,i)=>`<div class="mr" data-row="${pref}${i+1}"><div class="t">${t}</div>${[0,1,2,3,4].map(v=>numBtn(pref+(i+1),v,ISI_L[v])).join("")}${
-     pref==="isi7_"&&i===3?`<div class="other"><input class="inp" data-field="isi7_autre" placeholder="Précisez"></div>`:""}</div>`).join("")+`</div>`;
-}
-$("#isi2").innerHTML = mtx("isi6_",ISI6,"Jusqu’à quel point croyez-vous que les facteurs suivants contribuent à vos difficultés de sommeil ?","6")
-  + mtx("isi7_",ISI7,"Après une MAUVAISE NUIT DE SOMMEIL, quelles difficultés suivantes éprouvez-vous le lendemain ? Veuillez indiquer à quelle intensité vous éprouvez ces difficultés.","7");
 
 (function(){
   let h = `<div class="hd"><div>SYMPTÔMES</div>${HAM_L.map((l,v)=>`<div style="background:${HAM_COL[v]}"><b>${v}</b>${l}</div>`).join("")}</div>`;
@@ -1160,6 +1134,10 @@ document.addEventListener("click", e=>{
     A[k] = (A[k]===v) ? undefined : v;   // second appui = désélection
     if(A[k]===undefined) delete A[k];
   }
+  // ISI 1a/1b/1c → Hamilton 4/5/6 (même échelle 0–4), tant que le patient ne les a pas modifiées
+  const hm = A._hman || (A._hman = {});
+  if(ISI2H[k]){ const hk=ISI2H[k]; if(!hm[hk]){ if(A[k]===undefined) delete A[hk]; else A[hk]=A[k]; } }
+  else if(Object.values(ISI2H).includes(k)) hm[k]=1;
   save(); refresh();
   // passage automatique à la ligne suivante dans les grilles
   const row = b.closest("[data-row]");
@@ -1242,6 +1220,7 @@ function refresh(fromInput){
   const i=sum(ISI_KEYS); $("#isi_tot").textContent = i.n? i.s : "–";
   $("#isi_st").textContent = i.n && i.n<7 ? `${7-i.n} question(s) sans réponse` : "";
   const h=sum(HK); $("#ham_tot").textContent = h.n? h.s : "–";
+  $("#hpre").style.display = Object.entries(ISI2H).some(([i,h])=>A[i]!==undefined && !(A._hman||{})[h]) ? "" : "none";
   $("#suicalert").classList.toggle("on", (A.h3||0)>=1);
   $("#drivealert").classList.toggle("on", A.lutte==="Régulièrement" || A.accident==="Oui");
   const st=sleepTimes(); $("#tst").innerHTML = st.moy!=null ? `Temps de sommeil moyen estimé (coucher → lever) : <b>${fmtDur(st.moy)}</b>${st.s!=null&&st.w!=null?` <span class="hint">(semaine ${fmtDur(st.s)} · week-end ${fmtDur(st.w)})</span>`:""}` : "";
@@ -1267,7 +1246,7 @@ function go(n, push=true){
   scrollTo(0,0);
   if(push) history.pushState({s:cur},"","#"+cur);
 }
-function missingIn(step){ return $$("[data-row]", step).filter(r=>A[r.dataset.row]===undefined && r.dataset.row!=="isi7_4"); }
+function missingIn(step){ return $$("[data-row]", step).filter(r=>A[r.dataset.row]===undefined); }
 $("#next").onclick = ()=>{
   if(cur===0 && !String(A.nom||"").trim()){ toast("Merci d’indiquer votre nom et prénom."); $("#f_nom").focus(); return; }
   const miss = missingIn(steps[cur]);
@@ -1351,9 +1330,6 @@ function reportBlocks(){
   B.push(`<div class="rb"><h4>Index de sévérité de l’insomnie (ISI)</h4><table class="rt"><tr><th>Question</th>${ISI_L.map((l,v)=>`<th>${v}<br><span style="font-weight:400">${l}</span></th>`).join("")}</tr>
     ${isiRows.map(([k,t])=>`<tr class="${A[k]===undefined?"na":""}"><td>${t}</td>${circ(k,4)}</tr>`).join("")}</table>
     <div class="rtot">Score total : ${i.n?i.s:"—"} / 28 ${i.n?"– "+isiInt(i.s):""}</div></div>`);
-  B.push(`<div class="rb"><h4>ISI – facteurs contributifs (6) et retentissement du lendemain (7) <span style="font-weight:400">(non inclus dans le score)</span></h4><table class="rt"><tr><th></th>${ISI_L.map((l,v)=>`<th>${v}</th>`).join("")}</tr>
-    ${ISI6.map((t,j)=>`<tr class="${A["isi6_"+(j+1)]===undefined?"na":""}"><td>6. ${t}</td>${circ("isi6_"+(j+1),4)}</tr>`).join("")}
-    ${ISI7.map((t,j)=>`<tr class="${A["isi7_"+(j+1)]===undefined&&j<3?"na":""}"><td>7. ${t}${j===3&&A.isi7_autre?" : <b>"+esc(A.isi7_autre)+"</b>":""}</td>${circ("isi7_"+(j+1),4)}</tr>`).join("")}</table></div>`);
   B.push(`<div class="rb"><h4>Échelle de dépression de Hamilton (HDRS-17) – auto-questionnaire, 7 derniers jours</h4><table class="rt"><tr><th>Symptôme</th>${HAM_L.map((l,v)=>`<th>${v}<br><span style="font-weight:400">${l}</span></th>`).join("")}</tr>
     ${HAM.map((x,j)=>`<tr class="${A["h"+(j+1)]===undefined?"na":""}"><td><b>${j+1}. ${x[0]}</b> – <span style="color:#666">${x[1]}</span></td>${circ("h"+(j+1),4)}</tr>`).join("")}</table>
     <div class="rtot">Score total : ${h.n?h.s:"—"} / 68</div></div>`);
