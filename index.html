@@ -737,6 +737,11 @@ textarea.inp{min-height:110px;resize:vertical}
 .rsyn .c ul{margin:0;padding-left:14px}
 .rsyn .c li{margin:0}
 .rsyn .c .none{color:#aaa;font-style:italic}
+.ig{display:grid;gap:5px;margin-bottom:5px}
+.ig>div{border:1px solid #eadbe4;border-radius:6px;padding:3px 8px;background:#fff}
+.ig small{display:block;color:#888;font-size:9.5px}
+.ig b{font-size:12px;font-weight:600}
+.ig .ab b{color:var(--pink)}
 .kv{display:grid;grid-template-columns:200px 1fr;border:1px solid #eee;border-radius:6px;overflow:hidden}
 .kv div{padding:4px 8px;border-bottom:1px solid #f1f1f1}
 .kv div:nth-child(odd){background:#f2f6fb;color:#555}
@@ -1397,7 +1402,7 @@ function synthese(){
   if(h.n && (A.h3||0)===0) hum.push("Pas d’idées suicidaires");
   // Terrain
   const ter=[];
-  if(m){ const im=`IMC ${m.toFixed(1).replace(".",",")}`; ter.push((m>=30?B(im):im)+` (${imcInt(m)})`); }
+  if(m){ const im=`IMC ${m.toFixed(1).replace(".",",")}`; ter.push(m>=30?B(im):im); }
   const at=(A.atcd||[]).filter(x=>x!=="Aucune").map(x=>x.replace(/ \(.*\)/,""));
   if(at.length) ter.push(B(uc(list(at.map(lc)))));
   if(A.atcdfam==="Oui") ter.push(`ATCD familial de SAOS${A.atcdfam_detail?` (${esc(A.atcdfam_detail)})`:""}`);
@@ -1423,31 +1428,31 @@ function reportBlocks(){
     <div><small>Sexe · Rempli le</small><b>${A.sexe?esc(A.sexe.replace("Un ","").replace("Une ","")):"—"} · ${new Date().toLocaleDateString("fr-FR")}</b></div>
     <div style="grid-column:span 2"><small>Profession</small><b>${fmt(A.profession)}</b></div>
     <div class="big"><small>Poids · Taille</small><b>${A.poids?esc(A.poids)+" kg":"—"} · ${A.taille?esc(A.taille)+" cm":"—"}</b></div>
-    <div class="imc"><small>IMC</small><b>${m?m.toFixed(1).replace(".",","):"—"}</b>${m?`<i>${imcInt(m)}</i>`:""}</div></div>
+    <div class="imc"><small>IMC</small><b>${m?m.toFixed(1).replace(".",","):"—"}</b>${m?`<i>kg/m²</i>`:""}</div></div>
    <h4>Synthèse globale</h4>${synthese()}
    <h4 class="pkh" style="margin-top:10px">Synthèse des scores</h4>
    <div class="rtiles">
     <div><small>Epworth</small><b>${e.n?e.s:"—"}<span style="font-size:11px;color:#888"> /24</span></b><i>${e.n?epwInt(e.s):""}</i>${part(e)}</div>
     <div><small>ISI (insomnie)</small><b>${i.n?i.s:"—"}<span style="font-size:11px;color:#888"> /28</span></b><i>${i.n?isiInt(i.s):""}</i>${part(i)}</div>
     <div><small>Hamilton (auto, 0–4)</small><b>${h.n?h.s:"—"}<span style="font-size:11px;color:#888"> /68</span></b><i>item 3 : ${A.h3??"—"}</i>${part(h)}</div>
-    <div><small>IMC</small><b>${m?m.toFixed(1).replace(".",","):"—"}</b><i>${m?imcInt(m):""}</i></div>
+    <div><small>IMC</small><b>${m?m.toFixed(1).replace(".",","):"—"}</b><i>${m?"kg/m²":""}</i></div>
     <div><small>STOP-Bang (calculé)</small><b>${sb.s}<span style="font-size:11px;color:#888"> /8</span></b><i>${sb.risk}${sb.unk?` · ${sb.unk} item(s) inconnu(s)`:""}</i></div>
    </div>${alerts}</div>`);
   const adr = (A.adresse==="Autre"&&A.adresse_autre?"Autre : "+A.adresse_autre:A.adresse);
   const adrNom = A.adresse!=="Initiative personnelle" ? [A.adresse_nom,A.adresse_ville].filter(Boolean).join(", ") : "";
   const copies = (A.copies||[]).filter(c=>(c.nom||"").trim()||(c.spe||"").trim()).map(c=>[c.nom,c.spe].filter(x=>(x||"").trim()).join(" – "));
-  B.push(`<div class="rb"><h4>Votre consultation</h4>${kv([
-    ["Adressé(e) par",fmt(adr)+(adrNom?" : <b>"+esc(adrNom)+"</b>":"")],
-    ["Médecin traitant",A.adresse==="Médecin traitant"?"(médecin adresseur)":fmt(A.medtt)],
-    ["Copie du compte rendu à",A.copie==="Oui"&&copies.length?copies.map(esc).join("<br>"):fmt(A.copie==="Oui"?"Oui (non précisé)":A.copie)],
-    ["Motif de consultation",`<span style="white-space:pre-wrap">${fmt(A.motif)}</span>`]])}</div>`);
-  B.push(`<div class="rb"><h4>Votre sommeil</h4>${kv([
-    ["Poids / taille",`${fmt(A.poids)} kg · ${fmt(A.taille)} cm`],
-    ["IMC (calculé)", m ? `<b>${m.toFixed(1).replace(".",",")} kg/m²</b> – ${imcInt(m)}` : fmt(null)],
+  const ig=(cells,n)=>`<div class="ig" style="grid-template-columns:repeat(${n||cells.length},1fr)">${cells.map(([k,v,ab])=>`<div${ab?' class="ab"':""}><small>${k}</small><b>${v}</b></div>`).join("")}</div>`;
+  const cs=[["Adressé(e) par",fmt(adr)+(adrNom?" : "+esc(adrNom):"")],
+    ["Médecin traitant",A.adresse==="Médecin traitant"?"= médecin adresseur":fmt(A.medtt)]];
+  if(A.copie==="Oui") cs.push(["Copie du compte rendu à",copies.length?copies.map(esc).join("<br>"):"Oui (non précisé)"]);
+  B.push(`<div class="rb"><h4>Votre consultation</h4>${kv([["Motif de consultation",`<span style="white-space:pre-wrap">${fmt(A.motif)}</span>`]])}<div style="height:5px"></div>${ig(cs)}</div>`);
+  const no=v=>v==null||v===""||(Array.isArray(v)&&!v.length);
+  B.push(`<div class="rb"><h4>Votre sommeil</h4>${ig([["Poids",no(A.poids)?fmt(null):esc(A.poids)+" kg"],["Taille",no(A.taille)?fmt(null):esc(A.taille)+" cm"],["IMC (calculé)",m?m.toFixed(1).replace(".",",")+" kg/m²":fmt(null),m>=30]])}${ig([
+    ["Ronflement",fmt(A.ronfle),A.ronfle==="Oui, fortement"],["Arrêts respiratoires constatés",fmt(A.apnees),A.apnees==="Oui"],["Réveils avec étouffement",fmt(A.etouff),A.etouff==="Oui"],
+    ["Sommeil réparateur",fmt(A.repar),A.repar==="Non"],["Au réveil",fmt(A.reveil),!no(A.reveil)&&!(A.reveil||[]).includes("Aucun")],["Nycturie",fmt(A.nycturie),A.nycturie==="2 fois"||A.nycturie==="3 fois ou plus"]],3)}${kv([
     ["Horaires coucher → lever", `Semaine : ${A.couch_sem||A.lever_sem ? fmt(A.couch_sem)+" → "+fmt(A.lever_sem) : fmt(null)} · Week-end : ${A.couch_we||A.lever_we ? fmt(A.couch_we)+" → "+fmt(A.lever_we) : fmt(null)}`],
     ["Temps de sommeil moyen estimé", (()=>{ const st=sleepTimes(); return st.moy!=null ? `<b>${fmtDur(st.moy)}</b>${st.s!=null&&st.w!=null?` (semaine ${fmtDur(st.s)}, week-end ${fmtDur(st.w)} ; moyenne 5 j + 2 j)`:""}` : fmt(null); })()],
-    ["Ronflement",fmt(A.ronfle)],["Arrêts respiratoires constatés",fmt(A.apnees)],["Réveils avec étouffement",fmt(A.etouff)],
-    ["Sommeil réparateur",fmt(A.repar)],["Au réveil",fmt(A.reveil)],["Nycturie",fmt(A.nycturie)]])}</div>`);
+])}</div>`);
   B.push(`<div class="rb"><h4>Antécédents et traitements</h4>${kv([
     ["Maladies",fmt(A.atcd)],
     ["Antécédents familiaux d’apnée du sommeil",fmt(A.atcdfam)+(A.atcdfam==="Oui"&&A.atcdfam_detail?" : "+esc(A.atcdfam_detail):"")],["Hypnotique / anxiolytique / morphinique",fmt(A.ttt)+(A.ttt==="Oui"&&A.ttt_detail?" : "+esc(A.ttt_detail):"")],
