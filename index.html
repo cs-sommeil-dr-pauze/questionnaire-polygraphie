@@ -1240,9 +1240,9 @@ function stopbang(){
   add("HTA", A.atcd&&A.atcd.length? A.atcd.some(x=>x.startsWith("HTA")) : null);
   add("IMC > 35", m==null?null:m>35);
   add("Âge > 50 ans", ag==null?null:ag>50);
-  add("Tour de cou > 40 cm", isNaN(cou)?null:cou>40);
+  add("Tour de cou > 40 cm", null);   // jamais renseigné par les patients : non compté, non affiché
   add("Sexe masculin", A.sexe==null?null:A.sexe==="Un homme");
-  const s=it.filter(x=>x[1]===true).length, unk=it.filter(x=>x[1]===null).length;
+  const s=it.filter(x=>x[1]===true).length, unk=it.filter(x=>x[1]===null && !x[0].startsWith("Tour de cou")).length;
   return {s,unk,it,risk: s>=5?"risque élevé":s>=3?"risque intermédiaire":"risque faible"};
 }
 
@@ -1397,8 +1397,7 @@ function synthese(){
   if(h.n && (A.h3||0)===0) hum.push("Pas d’idées suicidaires");
   // Terrain
   const ter=[];
-  const cou=parseFloat(String(A.cou||"").replace(",","."));
-  if(m||cou>0){ const im=m?`IMC ${m.toFixed(1).replace(".",",")}`:""; ter.push([m?(m>=30?B(im):im)+` (${imcInt(m)})`:"", cou>0?`cou ${cou>40?B(cou+" cm"):cou+" cm"}`:""].filter(Boolean).join(", ")); }
+  if(m){ const im=`IMC ${m.toFixed(1).replace(".",",")}`; ter.push((m>=30?B(im):im)+` (${imcInt(m)})`); }
   const at=(A.atcd||[]).filter(x=>x!=="Aucune").map(x=>x.replace(/ \(.*\)/,""));
   if(at.length) ter.push(B(uc(list(at.map(lc)))));
   if(A.atcdfam==="Oui") ter.push(`ATCD familial de SAOS${A.atcdfam_detail?` (${esc(A.atcdfam_detail)})`:""}`);
@@ -1424,14 +1423,14 @@ function reportBlocks(){
     <div><small>Sexe · Rempli le</small><b>${A.sexe?esc(A.sexe.replace("Un ","").replace("Une ","")):"—"} · ${new Date().toLocaleDateString("fr-FR")}</b></div>
     <div style="grid-column:span 2"><small>Profession</small><b>${fmt(A.profession)}</b></div>
     <div class="big"><small>Poids · Taille</small><b>${A.poids?esc(A.poids)+" kg":"—"} · ${A.taille?esc(A.taille)+" cm":"—"}</b></div>
-    <div class="imc"><small>IMC${A.cou?` · tour de cou ${esc(A.cou)} cm`:""}</small><b>${m?m.toFixed(1).replace(".",","):"—"}</b>${m?`<i>${imcInt(m)}</i>`:""}</div></div>
+    <div class="imc"><small>IMC</small><b>${m?m.toFixed(1).replace(".",","):"—"}</b>${m?`<i>${imcInt(m)}</i>`:""}</div></div>
    <h4>Synthèse globale</h4>${synthese()}
    <h4 class="pkh" style="margin-top:10px">Synthèse des scores</h4>
    <div class="rtiles">
     <div><small>Epworth</small><b>${e.n?e.s:"—"}<span style="font-size:11px;color:#888"> /24</span></b><i>${e.n?epwInt(e.s):""}</i>${part(e)}</div>
     <div><small>ISI (insomnie)</small><b>${i.n?i.s:"—"}<span style="font-size:11px;color:#888"> /28</span></b><i>${i.n?isiInt(i.s):""}</i>${part(i)}</div>
     <div><small>Hamilton (auto, 0–4)</small><b>${h.n?h.s:"—"}<span style="font-size:11px;color:#888"> /68</span></b><i>item 3 : ${A.h3??"—"}</i>${part(h)}</div>
-    <div><small>IMC</small><b>${m?m.toFixed(1).replace(".",","):"—"}</b><i>${m?imcInt(m):""}${A.cou?` · cou ${esc(A.cou)} cm`:""}</i></div>
+    <div><small>IMC</small><b>${m?m.toFixed(1).replace(".",","):"—"}</b><i>${m?imcInt(m):""}</i></div>
     <div><small>STOP-Bang (calculé)</small><b>${sb.s}<span style="font-size:11px;color:#888"> /8</span></b><i>${sb.risk}${sb.unk?` · ${sb.unk} item(s) inconnu(s)`:""}</i></div>
    </div>${alerts}</div>`);
   const adr = (A.adresse==="Autre"&&A.adresse_autre?"Autre : "+A.adresse_autre:A.adresse);
@@ -1443,7 +1442,7 @@ function reportBlocks(){
     ["Copie du compte rendu à",A.copie==="Oui"&&copies.length?copies.map(esc).join("<br>"):fmt(A.copie==="Oui"?"Oui (non précisé)":A.copie)],
     ["Motif de consultation",`<span style="white-space:pre-wrap">${fmt(A.motif)}</span>`]])}</div>`);
   B.push(`<div class="rb"><h4>Votre sommeil</h4>${kv([
-    ["Poids / taille / tour de cou",`${fmt(A.poids)} kg · ${fmt(A.taille)} cm · ${fmt(A.cou)} cm`],
+    ["Poids / taille",`${fmt(A.poids)} kg · ${fmt(A.taille)} cm`],
     ["IMC (calculé)", m ? `<b>${m.toFixed(1).replace(".",",")} kg/m²</b> – ${imcInt(m)}` : fmt(null)],
     ["Horaires coucher → lever", `Semaine : ${A.couch_sem||A.lever_sem ? fmt(A.couch_sem)+" → "+fmt(A.lever_sem) : fmt(null)} · Week-end : ${A.couch_we||A.lever_we ? fmt(A.couch_we)+" → "+fmt(A.lever_we) : fmt(null)}`],
     ["Temps de sommeil moyen estimé", (()=>{ const st=sleepTimes(); return st.moy!=null ? `<b>${fmtDur(st.moy)}</b>${st.s!=null&&st.w!=null?` (semaine ${fmtDur(st.s)}, week-end ${fmtDur(st.w)} ; moyenne 5 j + 2 j)`:""}` : fmt(null); })()],
@@ -1467,7 +1466,7 @@ function reportBlocks(){
   B.push(`<div class="rb"><h4>Échelle de dépression de Hamilton (HDRS-17) – auto-questionnaire, 7 derniers jours</h4><table class="rt"><tr><th>Symptôme</th>${HAM_L.map((l,v)=>`<th>${v}<br><span style="font-weight:400">${l}</span></th>`).join("")}</tr>
     ${HAM.map((x,j)=>`<tr class="${A["h"+(j+1)]===undefined?"na":""}"><td><b>${j+1}. ${x[0]}</b> – <span style="color:#666">${x[1]}</span></td>${circ("h"+(j+1),4)}</tr>`).join("")}</table>
     <div class="rtot">Score total : ${h.n?h.s:"—"} / 68</div></div>`);
-  B.push(`<div class="rb"><h4 class="pkh">Détail du STOP-Bang (calculé à partir des réponses)</h4>${kv(sb.it.map(([l,v])=>[l, v===null?'<span style="color:#bbb">non renseigné</span>':v?"<b>Oui</b>":"Non"]))}
+  B.push(`<div class="rb"><h4 class="pkh">Détail du STOP-Bang (calculé à partir des réponses)</h4>${kv(sb.it.filter(([l])=>!l.startsWith("Tour de cou")).map(([l,v])=>[l, v===null?'<span style="color:#bbb">non renseigné</span>':v?"<b>Oui</b>":"Non"]))}
     <div style="font-size:9.5px;color:#888;margin-top:4px">Score indicatif reconstitué automatiquement : 0–2 risque faible, 3–4 intermédiaire, 5–8 élevé de SAOS modéré à sévère.</div></div>`);
   return B;
 }
