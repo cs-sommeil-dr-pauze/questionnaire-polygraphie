@@ -741,10 +741,15 @@ textarea.inp{min-height:110px;resize:vertical}
 .kv div{padding:4px 8px;border-bottom:1px solid #f1f1f1}
 .kv div:nth-child(odd){background:#f2f6fb;color:#555}
 .kv div:nth-last-child(-n+2){border-bottom:0}
-.rid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.rid{display:grid;grid-template-columns:1fr 1fr 1.4fr 1fr;gap:8px;margin-bottom:12px}
 .rid div{border:1px solid #d6e0ee;border-radius:6px;padding:5px 8px}
 .rid small{display:block;color:#888;font-size:9.5px}
-.rid b{font-size:12.5px}
+.rid b{font-size:14px}
+.rid .big b{font-size:16px;color:var(--navy);white-space:nowrap}
+.rid>div:nth-child(3) b{font-size:12px;white-space:nowrap}
+.rid .imc{background:var(--rose3,#fdf2f7);border:1.5px solid var(--pink)}
+.rid .imc b{font-size:18px;color:var(--pink)}
+.rid .imc i{font-style:normal;font-size:10px;color:#555;margin-left:4px}
 .rtiles{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
 .rtiles div{border:1.5px solid #d6e0ee;border-radius:8px;padding:7px 8px;background:#f5f8fc}
 .rtiles small{display:block;color:#777;font-size:9.5px}
@@ -810,6 +815,7 @@ textarea.inp{min-height:110px;resize:vertical}
     <div class="field"><label for="f_ddn">Date de naissance</label><input id="f_ddn" class="inp" type="date" data-field="ddn" max="2026-12-31"></div>
     <div class="field"><label>Vous êtes</label><div class="chips" data-name="sexe" data-opts="Un homme|Une femme"></div></div>
    </div>
+   <div class="more" style="margin-top:12px"><div class="field"><label for="f_prof">Profession</label><input id="f_prof" class="inp" data-field="profession" autocomplete="organization-title" placeholder="Ex. : chauffeur routier, infirmière de nuit, retraité (ancien boulanger)…"></div></div>
   </div>
  </div>
 </section>
@@ -1345,7 +1351,7 @@ function synthese(){
   const EPS=["lecture","télévision","lieu public","passager en voiture","allongé l’après-midi","conversation","après le déjeuner","voiture à l’arrêt"];
   const fem=A.sexe==="Une femme", ee=fem?"e":"";
   // En-tête : qui, adressé par qui, motif avec les mots du patient
-  const who=[A.sexe?(fem?"Femme":"Homme"):"", ag!=null?ag+" ans":""].filter(Boolean).join(", ");
+  const who=[A.sexe?(fem?"Femme":"Homme"):"", ag!=null?ag+" ans":"", A.profession?esc(lc(A.profession.trim())):""].filter(Boolean).join(", ");
   let adr="";
   if(A.adresse==="Initiative personnelle") adr=`venu${ee} de sa propre initiative`;
   else if(A.adresse){
@@ -1414,8 +1420,11 @@ function reportBlocks(){
   if(A.lutte==="Régulièrement"||A.accident==="Oui") alerts+=`<div class="ralert">⚠ Somnolence au volant : lutte ${esc(A.lutte||"—")}, accident/quasi-accident ${esc(A.accident||"—")}${A.conduitepro==="Oui"?", <b>conduite professionnelle</b>"+(A.conduitepro_detail?" ("+esc(A.conduitepro_detail)+")":""):""}.</div>`;
   B.push(`<div class="rb"><div class="rid">
     <div style="grid-column:span 2"><small>Nom et prénom</small><b>${fmt(A.nom)}</b></div>
-    <div><small>Date de naissance${ag!=null?" (âge)":""}</small><b>${dn}${ag!=null?` (${ag} ans)`:""}</b></div>
-    <div><small>Sexe · Rempli le</small><b>${A.sexe?esc(A.sexe.replace("Un ","").replace("Une ","")):"—"} · ${new Date().toLocaleDateString("fr-FR")}</b></div></div>
+    <div class="big"><small>Date de naissance${ag!=null?" (âge)":""}</small><b>${dn}${ag!=null?` (${ag} ans)`:""}</b></div>
+    <div><small>Sexe · Rempli le</small><b>${A.sexe?esc(A.sexe.replace("Un ","").replace("Une ","")):"—"} · ${new Date().toLocaleDateString("fr-FR")}</b></div>
+    <div style="grid-column:span 2"><small>Profession</small><b>${fmt(A.profession)}</b></div>
+    <div class="big"><small>Poids · Taille</small><b>${A.poids?esc(A.poids)+" kg":"—"} · ${A.taille?esc(A.taille)+" cm":"—"}</b></div>
+    <div class="imc"><small>IMC${A.cou?` · tour de cou ${esc(A.cou)} cm`:""}</small><b>${m?m.toFixed(1).replace(".",","):"—"}</b>${m?`<i>${imcInt(m)}</i>`:""}</div></div>
    <h4>Synthèse globale</h4>${synthese()}
    <h4 class="pkh" style="margin-top:10px">Synthèse des scores</h4>
    <div class="rtiles">
