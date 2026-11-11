@@ -714,63 +714,63 @@ textarea.inp{min-height:110px;resize:vertical}
 
 /* ---------- Rapport PDF (hors écran) ---------- */
 #report{position:absolute;left:-12000px;top:0}
-.rpage{width:794px;height:1123px;background:#fff;padding:34px 42px 30px;display:flex;flex-direction:column;font-family:Lexend,sans-serif;color:#1f1e45;font-size:11.5px;line-height:1.4;overflow:hidden}
-.rhead{display:flex;align-items:center;gap:14px;border-bottom:2px solid var(--pink);padding-bottom:10px;margin-bottom:14px}
-.rhead img{height:46px}
+.rpage{width:794px;height:1123px;background:#fff;padding:28px 38px 24px;display:flex;flex-direction:column;font-family:Lexend,sans-serif;color:#1f1e45;font-size:10px;line-height:1.35;overflow:hidden}
+.rhead{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--pink);padding-bottom:7px;margin-bottom:10px}
+.rhead img{height:38px}
 .rhead .m{flex:1}
-.rhead .m b{display:block;font-size:15px;color:var(--navy)}
-.rhead .m span{color:var(--pink);font-size:11px}
-.rhead .p{text-align:right;font-size:10.5px;color:#666}
+.rhead .m b{display:block;font-size:13px;color:var(--navy)}
+.rhead .m span{color:var(--pink);font-size:9.5px}
+.rhead .p{text-align:right;font-size:9.5px;color:#666}
 .rbody{flex:1;overflow:hidden}
-.rfoot{border-top:1px solid #eee;padding-top:6px;font-size:9px;color:#888;display:flex;justify-content:space-between}
-.rb{margin-bottom:12px}
-.rb h4{margin:0 0 6px;font-size:13px;color:#fff;background:var(--navy);padding:5px 10px;border-radius:6px;font-weight:600}
+.rfoot{border-top:1px solid #eee;padding-top:5px;font-size:8px;color:#888;display:flex;justify-content:space-between}
+.rb{margin-bottom:8px}
+.rb h4{margin:0 0 4px;font-size:11px;color:#fff;background:var(--navy);padding:3px 9px;border-radius:5px;font-weight:600}
 .rb h4.pkh{background:var(--pink)}
-.rsyn{border:1.5px solid var(--navy);border-radius:8px;padding:9px 12px;font-size:11px;line-height:1.45;color:#222;background:#fbfcfe}
-.rsyn .hd{border-left:3px solid var(--navy);padding:1px 0 1px 10px;margin-bottom:7px}
-.rsyn .who{color:#666;font-size:10.5px}
-.rsyn .mot{font-size:12.5px;font-weight:700;color:var(--navy)}
-.rsyn .al{color:#a01818;font-weight:700;margin:0 0 7px;font-size:11px}
-.rsyn .g4{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.rsyn .c{border:1px solid #dfe3ea;border-radius:6px;padding:5px 9px;background:#fff}
-.rsyn .c h5{margin:0 0 2px;font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--navy)}
-.rsyn .c ul{margin:0;padding-left:14px}
+.rsyn{border:1.5px solid var(--navy);border-radius:7px;padding:7px 10px;font-size:9.5px;line-height:1.4;color:#222;background:#fbfcfe}
+.rsyn .hd{border-left:3px solid var(--navy);padding:1px 0 1px 9px;margin-bottom:5px}
+.rsyn .who{color:#666;font-size:9px}
+.rsyn .mot{font-size:11px;font-weight:700;color:var(--navy)}
+.rsyn .al{color:#a01818;font-weight:700;margin:0 0 5px;font-size:9.5px}
+.rsyn .g4{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.rsyn .c{border:1px solid #dfe3ea;border-radius:5px;padding:4px 8px;background:#fff}
+.rsyn .c h5{margin:0 0 1px;font-size:8.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--navy)}
+.rsyn .c ul{margin:0;padding-left:13px}
 .rsyn .c li{margin:0}
 .rsyn .c .none{color:#aaa;font-style:italic}
-.ig{display:grid;gap:5px;margin-bottom:5px}
-.ig>div{border:1px solid #eadbe4;border-radius:6px;padding:3px 8px;background:#fff}
-.ig small{display:block;color:#888;font-size:9.5px}
-.ig b{font-size:12px;font-weight:600}
+.ig{display:grid;gap:4px;margin-bottom:4px}
+.ig>div{border:1px solid #d6e0ee;border-radius:5px;padding:2px 7px;background:#fff}
+.ig small{display:block;color:#888;font-size:8px;line-height:1.25}
+.ig b{font-size:10px;font-weight:600}
 .ig .ab b{color:var(--pink)}
-.kv{display:grid;grid-template-columns:200px 1fr;border:1px solid #eee;border-radius:6px;overflow:hidden}
-.kv div{padding:4px 8px;border-bottom:1px solid #f1f1f1}
+.kv{display:grid;grid-template-columns:170px 1fr;border:1px solid #eee;border-radius:5px;overflow:hidden}
+.kv div{padding:3px 7px;border-bottom:1px solid #f1f1f1}
 .kv div:nth-child(odd){background:#f2f6fb;color:#555}
 .kv div:nth-last-child(-n+2){border-bottom:0}
-.rid{display:grid;grid-template-columns:1fr 1fr 1.4fr 1fr;gap:8px;margin-bottom:12px}
-.rid div{border:1px solid #d6e0ee;border-radius:6px;padding:5px 8px}
-.rid small{display:block;color:#888;font-size:9.5px}
-.rid b{font-size:14px}
-.rid .big b{font-size:16px;color:var(--navy);white-space:nowrap}
-.rid>div:nth-child(3) b{font-size:12px;white-space:nowrap}
-.rid .imc{background:var(--rose3,#fdf2f7);border:1.5px solid var(--pink)}
-.rid .imc b{font-size:18px;color:var(--pink)}
-.rid .imc i{font-style:normal;font-size:10px;color:#555;margin-left:4px}
-.rtiles{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.rtiles div{border:1.5px solid #d6e0ee;border-radius:8px;padding:7px 8px;background:#f5f8fc}
-.rtiles small{display:block;color:#777;font-size:9.5px}
-.rtiles b{display:block;font-size:19px;color:var(--navy)}
-.rtiles i{font-style:normal;font-size:9.5px;display:block;line-height:1.25}
-.ralert{border:1.5px solid #e9a3a3;background:#fff3f3;color:#7c1515;border-radius:6px;padding:6px 10px;margin-top:8px;font-size:11px}
-.rt{width:100%;border-collapse:collapse;font-size:11px}
-.rt th{background:#e9eff8;color:var(--navy);font-weight:600;padding:5px 6px;text-align:center;font-size:10px}
+.rid{display:grid;grid-template-columns:1fr 1fr 1.4fr 1fr;gap:6px;margin-bottom:8px}
+.rid div{border:1px solid #d6e0ee;border-radius:5px;padding:3px 7px}
+.rid small{display:block;color:#888;font-size:8px}
+.rid b{font-size:12px}
+.rid .big b{font-size:13.5px;color:var(--navy);white-space:nowrap}
+.rid>div:nth-child(3) b{font-size:10.5px;white-space:nowrap}
+.rid .imc{background:var(--rose3,#f5f8fc);border:1.5px solid var(--pink)}
+.rid .imc b{font-size:15px;color:var(--pink)}
+.rid .imc i{font-style:normal;font-size:8.5px;color:#555;margin-left:4px}
+.rtiles{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.rtiles div{border:1.5px solid #d6e0ee;border-radius:7px;padding:4px 7px;background:#f5f8fc}
+.rtiles small{display:block;color:#777;font-size:8px}
+.rtiles b{display:block;font-size:15px;color:var(--navy)}
+.rtiles i{font-style:normal;font-size:8px;display:block;line-height:1.2}
+.ralert{border:1.5px solid #e9a3a3;background:#fff3f3;color:#7c1515;border-radius:5px;padding:4px 9px;margin-top:6px;font-size:9.5px}
+.rt{width:100%;border-collapse:collapse;font-size:9.5px}
+.rt th{background:#e9eff8;color:var(--navy);font-weight:600;padding:3px 5px;text-align:center;font-size:8.5px}
 .rt th:first-child{text-align:left}
-.rt td{border-bottom:1px solid #e3eaf4;padding:3px 6px}
-.rt td.c{text-align:center;width:44px}
-.rc{display:inline-block;width:20px;height:20px;line-height:18px;border-radius:50%;border:1px solid #e3e3e3;color:#c3c3c3;font-size:10.5px;text-align:center}
+.rt td{border-bottom:1px solid #e3eaf4;padding:2px 5px}
+.rt td.c{text-align:center;width:40px}
+.rc{display:inline-block;width:17px;height:17px;line-height:15px;border-radius:50%;border:1px solid #e3e3e3;color:#c3c3c3;font-size:9px;text-align:center}
 .rc.on{background:var(--pink);border-color:var(--pink);color:#fff;font-weight:700}
-.rt tr.na td:first-child:after{content:"  (non répondu)";color:#c06a00;font-size:9.5px}
-.rtot{text-align:right;font-weight:700;color:var(--navy);font-size:12.5px;margin-top:5px}
-.rtxt{border:1px solid #eee;border-radius:6px;padding:6px 8px;white-space:pre-wrap;min-height:20px}
+.rt tr.na td:first-child:after{content:"  (non répondu)";color:#c06a00;font-size:8px}
+.rtot{text-align:right;font-weight:700;color:var(--navy);font-size:10.5px;margin-top:3px}
+.rtxt{border:1px solid #eee;border-radius:5px;padding:4px 7px;white-space:pre-wrap;min-height:18px}
 
 @media print{
   body{background:#fff}
@@ -1410,7 +1410,6 @@ function synthese(){
   if(A.examen && A.examen!=="Non" && A.examen!=="Je ne sais pas") ter.push(`${A.examen} antérieure${A.examen_detail?` (${esc(A.examen_detail)})`:""}`);
   const tr=(A.traite||[]).filter(x=>x!=="Non");
   if(tr.length) ter.push(`Déjà traité${ee} : ${list(tr.map(x=>x==="Autre"&&A.traite_autre?esc(A.traite_autre):x))}`);
-  ter.push(`STOP-Bang ${sb.s>=5?B(sb.s+"/8"):sb.s+"/8"} (${sb.risk.replace("risque ","")})`);
   const cell=(t,a)=>`<div class="c"><h5>${t}</h5>${a.length?`<ul>${a.map(x=>`<li>${x}</li>`).join("")}</ul>`:`<div class="none">Rien de notable</div>`}</div>`;
   return `<div class="rsyn">${hd}${al.length?`<div class="al">⚠ ${al.join(" · ")}</div>`:""}<div class="g4">${cell("La nuit",nuit)}${cell("Le jour",jour)}${cell("Humeur",hum)}${cell("Terrain",ter)}</div></div>`;
 }
@@ -1435,8 +1434,6 @@ function reportBlocks(){
     <div><small>Epworth</small><b>${e.n?e.s:"—"}<span style="font-size:11px;color:#888"> /24</span></b><i>${e.n?epwInt(e.s):""}</i>${part(e)}</div>
     <div><small>ISI (insomnie)</small><b>${i.n?i.s:"—"}<span style="font-size:11px;color:#888"> /28</span></b><i>${i.n?isiInt(i.s):""}</i>${part(i)}</div>
     <div><small>Hamilton (auto, 0–4)</small><b>${h.n?h.s:"—"}<span style="font-size:11px;color:#888"> /68</span></b><i>item 3 : ${A.h3??"—"}</i>${part(h)}</div>
-    <div><small>IMC</small><b>${m?m.toFixed(1).replace(".",","):"—"}</b><i>${m?"kg/m²":""}</i></div>
-    <div><small>STOP-Bang (calculé)</small><b>${sb.s}<span style="font-size:11px;color:#888"> /8</span></b><i>${sb.risk}${sb.unk?` · ${sb.unk} item(s) inconnu(s)`:""}</i></div>
    </div>${alerts}</div>`);
   const adr = (A.adresse==="Autre"&&A.adresse_autre?"Autre : "+A.adresse_autre:A.adresse);
   const adrNom = A.adresse!=="Initiative personnelle" ? [A.adresse_nom,A.adresse_ville].filter(Boolean).join(", ") : "";
@@ -1447,32 +1444,32 @@ function reportBlocks(){
   if(A.copie==="Oui") cs.push(["Copie du compte rendu à",copies.length?copies.map(esc).join("<br>"):"Oui (non précisé)"]);
   B.push(`<div class="rb"><h4>Votre consultation</h4>${kv([["Motif de consultation",`<span style="white-space:pre-wrap">${fmt(A.motif)}</span>`]])}<div style="height:5px"></div>${ig(cs)}</div>`);
   const no=v=>v==null||v===""||(Array.isArray(v)&&!v.length);
-  B.push(`<div class="rb"><h4>Votre sommeil</h4>${ig([["Poids",no(A.poids)?fmt(null):esc(A.poids)+" kg"],["Taille",no(A.taille)?fmt(null):esc(A.taille)+" cm"],["IMC (calculé)",m?m.toFixed(1).replace(".",",")+" kg/m²":fmt(null),m>=30]])}${ig([
+  B.push(`<div class="rb"><h4>Votre sommeil</h4>${ig([
     ["Ronflement",fmt(A.ronfle),A.ronfle==="Oui, fortement"],["Arrêts respiratoires constatés",fmt(A.apnees),A.apnees==="Oui"],["Réveils avec étouffement",fmt(A.etouff),A.etouff==="Oui"],
-    ["Sommeil réparateur",fmt(A.repar),A.repar==="Non"],["Au réveil",fmt(A.reveil),!no(A.reveil)&&!(A.reveil||[]).includes("Aucun")],["Nycturie",fmt(A.nycturie),A.nycturie==="2 fois"||A.nycturie==="3 fois ou plus"]],3)}${kv([
+    ["Sommeil réparateur",fmt(A.repar),A.repar==="Non"],["Au réveil",fmt(A.reveil),!no(A.reveil)&&!(A.reveil||[]).includes("Aucun")],["Nycturie",fmt(A.nycturie),A.nycturie==="2 fois"||A.nycturie==="3 fois ou plus"]],3)}${ig([
     ["Horaires coucher → lever", `Semaine : ${A.couch_sem||A.lever_sem ? fmt(A.couch_sem)+" → "+fmt(A.lever_sem) : fmt(null)} · Week-end : ${A.couch_we||A.lever_we ? fmt(A.couch_we)+" → "+fmt(A.lever_we) : fmt(null)}`],
-    ["Temps de sommeil moyen estimé", (()=>{ const st=sleepTimes(); return st.moy!=null ? `<b>${fmtDur(st.moy)}</b>${st.s!=null&&st.w!=null?` (semaine ${fmtDur(st.s)}, week-end ${fmtDur(st.w)} ; moyenne 5 j + 2 j)`:""}` : fmt(null); })()],
-])}</div>`);
-  B.push(`<div class="rb"><h4>Antécédents et traitements</h4>${kv([
-    ["Maladies",fmt(A.atcd)],
-    ["Antécédents familiaux d’apnée du sommeil",fmt(A.atcdfam)+(A.atcdfam==="Oui"&&A.atcdfam_detail?" : "+esc(A.atcdfam_detail):"")],["Hypnotique / anxiolytique / morphinique",fmt(A.ttt)+(A.ttt==="Oui"&&A.ttt_detail?" : "+esc(A.ttt_detail):"")],
-    ["Examen du sommeil antérieur",fmt(A.examen)+(A.examen_detail?" ("+esc(A.examen_detail)+")":"")],
-    ["Traitement antérieur du SAOS",fmt(A.traite)+(A.traite_autre?" ("+esc(A.traite_autre)+")":"")]])}</div>`);
-  B.push(`<div class="rb"><h4>Somnolence et conduite</h4>${kv([
-    ["Lutte contre le sommeil au volant",fmt(A.lutte)],["Accident / quasi-accident par endormissement",fmt(A.accident)],
-    ["Conduite professionnelle",fmt(A.conduitepro)+(A.conduitepro==="Oui"&&A.conduitepro_detail?" ("+esc(A.conduitepro_detail)+")":"")]])}</div>`);
-  B.push(`<div class="rb"><h4>Échelle de somnolence d’Epworth</h4><table class="rt"><tr><th>Situation</th>${[0,1,2,3].map(v=>`<th>${v}</th>`).join("")}</tr>
+    ["Temps de sommeil moyen estimé", (()=>{ const st=sleepTimes(); return st.moy!=null ? `${fmtDur(st.moy)}${st.s!=null&&st.w!=null?`<span style="font-weight:400;color:#666"> (semaine ${fmtDur(st.s)}, week-end ${fmtDur(st.w)})</span>`:""}` : fmt(null); })()]],2)}</div>`);
+  const atcdOk=!no(A.atcd)&&!(A.atcd||[]).includes("Aucune"), traiteOk=!no(A.traite)&&!(A.traite||[]).includes("Non");
+  B.push(`<div class="rb"><h4>Antécédents et traitements</h4>${ig([
+    ["Maladies",fmt(A.atcd),atcdOk],
+    ["Antécédents familiaux d’apnée du sommeil",fmt(A.atcdfam)+(A.atcdfam==="Oui"&&A.atcdfam_detail?" : "+esc(A.atcdfam_detail):""),A.atcdfam==="Oui"],
+    ["Hypnotique / anxiolytique / morphinique",fmt(A.ttt)+(A.ttt==="Oui"&&A.ttt_detail?" : "+esc(A.ttt_detail):""),A.ttt==="Oui"]],3)}${ig([
+    ["Examen du sommeil antérieur",fmt(A.examen)+(A.examen_detail?" ("+esc(A.examen_detail)+")":""),A.examen==="Polygraphie"||A.examen==="Polysomnographie"],
+    ["Traitement antérieur du SAOS",fmt(A.traite)+(A.traite_autre?" ("+esc(A.traite_autre)+")":""),traiteOk]],2)}</div>`);
+  B.push(`<div class="rb"><h4>Somnolence et conduite</h4>${ig([
+    ["Lutte contre le sommeil au volant",fmt(A.lutte),A.lutte==="Régulièrement"],
+    ["Accident / quasi-accident par endormissement",fmt(A.accident),A.accident==="Oui"],
+    ["Conduite professionnelle",fmt(A.conduitepro)+(A.conduitepro==="Oui"&&A.conduitepro_detail?" ("+esc(A.conduitepro_detail)+")":""),A.conduitepro==="Oui"]],3)}</div>`);
+  B.push(`<div class="rb p2"><h4>Échelle de somnolence d’Epworth</h4><table class="rt"><tr><th>Situation</th>${[0,1,2,3].map(v=>`<th>${v}</th>`).join("")}</tr>
     ${EPW.map((t,j)=>`<tr class="${A["ep"+(j+1)]===undefined?"na":""}"><td>${t}</td>${circ("ep"+(j+1),3)}</tr>`).join("")}</table>
     <div class="rtot">Total : ${e.n?e.s:"—"} / 24 ${e.n?"– "+epwInt(e.s):""}</div></div>`);
   const isiRows=[["isi1a","1a. Difficultés à s’endormir"],["isi1b","1b. Réveils nocturnes fréquents ou prolongés"],["isi1c","1c. Réveils trop tôt le matin"],["isi2","2. Insatisfaction du sommeil actuel (0 = très satisfait)"],["isi3","3. Interférence avec le fonctionnement quotidien"],["isi4","4. Difficultés apparentes pour les autres"],["isi5","5. Inquiétude / préoccupation"]];
-  B.push(`<div class="rb"><h4>Index de sévérité de l’insomnie (ISI)</h4><table class="rt"><tr><th>Question</th>${ISI_L.map((l,v)=>`<th>${v}<br><span style="font-weight:400">${l}</span></th>`).join("")}</tr>
+  B.push(`<div class="rb p2"><h4>Index de sévérité de l’insomnie (ISI)</h4><table class="rt"><tr><th>Question</th>${ISI_L.map((l,v)=>`<th>${v}<br><span style="font-weight:400">${l}</span></th>`).join("")}</tr>
     ${isiRows.map(([k,t])=>`<tr class="${A[k]===undefined?"na":""}"><td>${t}</td>${circ(k,4)}</tr>`).join("")}</table>
     <div class="rtot">Score total : ${i.n?i.s:"—"} / 28 ${i.n?"– "+isiInt(i.s):""}</div></div>`);
-  B.push(`<div class="rb"><h4>Échelle de dépression de Hamilton (HDRS-17) – auto-questionnaire, 7 derniers jours</h4><table class="rt"><tr><th>Symptôme</th>${HAM_L.map((l,v)=>`<th>${v}<br><span style="font-weight:400">${l}</span></th>`).join("")}</tr>
+  B.push(`<div class="rb p2"><h4>Échelle de dépression de Hamilton (HDRS-17) – auto-questionnaire, 7 derniers jours</h4><table class="rt"><tr><th>Symptôme</th>${HAM_L.map((l,v)=>`<th>${v}<br><span style="font-weight:400">${l}</span></th>`).join("")}</tr>
     ${HAM.map((x,j)=>`<tr class="${A["h"+(j+1)]===undefined?"na":""}"><td><b>${j+1}. ${x[0]}</b> – <span style="color:#666">${x[1]}</span></td>${circ("h"+(j+1),4)}</tr>`).join("")}</table>
     <div class="rtot">Score total : ${h.n?h.s:"—"} / 68</div></div>`);
-  B.push(`<div class="rb"><h4 class="pkh">Détail du STOP-Bang (calculé à partir des réponses)</h4>${kv(sb.it.filter(([l])=>!l.startsWith("Tour de cou")).map(([l,v])=>[l, v===null?'<span style="color:#bbb">non renseigné</span>':v?"<b>Oui</b>":"Non"]))}
-    <div style="font-size:9.5px;color:#888;margin-top:4px">Score indicatif reconstitué automatiquement : 0–2 risque faible, 3–4 intermédiaire, 5–8 élevé de SAOS modéré à sévère.</div></div>`);
   return B;
 }
 async function buildPages(){
@@ -1482,11 +1479,15 @@ async function buildPages(){
   const newPage=()=>{ const p=document.createElement("div"); p.className="rpage";
     p.innerHTML=`<div class="rhead"><img src="${IMG.pmbsmall}"><div class="m"><b>Livret de questionnaires avant consultation</b><span>${CABINET.medecin}</span></div><div class="p">${nom}<br><span class="pn"></span></div></div><div class="rbody"></div><div class="rfoot"><span>Document rempli en ligne par le patient le ${new Date().toLocaleDateString("fr-FR")} – ne remplace pas une consultation médicale.</span><span class="pn2"></span></div>`;
     R.appendChild(p); pages.push(p); return $(".rbody",p); };
-  let body=newPage();
-  for(const html of blocks){
-    const tmp=document.createElement("div"); tmp.innerHTML=html; const el=tmp.firstElementChild;
-    body.appendChild(el);
-    if(body.scrollHeight>body.clientHeight+1 && body.children.length>1){ body.removeChild(el); body=newPage(); body.appendChild(el); }
+  // Page 1 : tout le recueil ; page 2 : les grilles Epworth, ISI, Hamilton. Toujours 2 pages.
+  const els=blocks.map(html=>{ const d=document.createElement("div"); d.innerHTML=html; return d.firstElementChild; });
+  for(const grp of [els.filter(x=>!x.classList.contains("p2")), els.filter(x=>x.classList.contains("p2"))]){
+    const body=newPage(), fit=document.createElement("div");
+    fit.style.transformOrigin="0 0"; grp.forEach(x=>fit.appendChild(x)); body.appendChild(fit);
+    // si le contenu déborde, on réduit l'ensemble jusqu'à ce qu'il tienne sur la page
+    for(let s=1; fit.offsetHeight*s > body.clientHeight && s>0.5; ){
+      s=Math.round((s-0.02)*100)/100; fit.style.width=(100/s)+"%"; fit.style.transform=`scale(${s})`;
+    }
   }
   pages.forEach((p,j)=>{ $(".pn",p).textContent=`Page ${j+1} / ${pages.length}`; });
   return pages;
