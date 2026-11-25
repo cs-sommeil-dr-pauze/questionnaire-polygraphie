@@ -959,6 +959,7 @@ textarea.inp{min-height:110px;resize:vertical}
   <div class="tbl" id="epw"><div class="hd"><div>SITUATION</div><div>CHANCE DE SOMNOLER</div></div></div>
   <div class="total"><span class="t">TOTAL :</span><span class="v" id="epw_tot">–</span></div>
   <div class="total" style="margin-top:4px"><span class="st" id="epw_st"></span></div>
+  <div class="alert" id="epwalert">🚗 <b>Prudence au volant :</b> votre score montre une somnolence dans la journée. Ne prenez pas la route si vous vous sentez fatigué(e) et arrêtez-vous dès les premiers signes (bâillements, paupières lourdes). Nous en parlerons lors de la consultation.</div>
  </div>
 </section>
 
@@ -1303,6 +1304,7 @@ function refresh(fromInput){
   setOn();
   const e=sum(EPK); $("#epw_tot").innerHTML = e.n? `${e.s} <small>&nbsp;/ 24</small>` : "–";
   $("#epw_st").textContent = e.n && e.n<8 ? `${8-e.n} situation(s) sans réponse` : "";
+  $("#epwalert").classList.toggle("on", e.s>10);   // somnolence diurne (Epworth > 10) : prudence au volant
   const i=sum(ISI_KEYS); $("#isi_tot").textContent = i.n? i.s : "–";
   $("#isi_st").textContent = i.n && i.n<7 ? `${7-i.n} question(s) sans réponse` : "";
   const h=sum(HK); $("#ham_tot").textContent = h.n? h.s : "–";
