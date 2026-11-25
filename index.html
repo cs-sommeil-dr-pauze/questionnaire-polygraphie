@@ -742,6 +742,24 @@ textarea.inp{min-height:110px;resize:vertical}
 .ig small{display:block;color:#888;font-size:8px;line-height:1.25}
 .ig b{font-size:10px;font-weight:600}
 .ig .ab b{color:var(--pink)}
+.sp{display:grid;grid-template-columns:1.3fr 1fr;gap:8px;align-items:start}
+.sp .pos{border-left:3px solid var(--pink);background:var(--rose3);border-radius:0 6px 6px 0;padding:3px 9px}
+.sp .pos div{display:grid;grid-template-columns:44% 1fr;gap:6px;padding:1.5px 0;border-bottom:1px dotted var(--rose)}
+.sp .pos div:last-child{border-bottom:0}
+.sp .pos span{color:#666}
+.sp .pos b{color:var(--navy);font-weight:600}
+.sp .pos i{color:#999}
+.sp .neg{padding-top:2px}
+.sp .neg>span{display:inline-block;border:1px solid #e3e3ea;border-radius:10px;padding:1px 7px;margin:0 3px 3px 0;color:#7a7a8a;font-size:8.5px;background:#fff}
+.hz{display:grid;grid-template-columns:1fr 1fr 1.15fr;gap:6px}
+.hz>div{border:1px solid var(--rose);border-radius:7px;padding:4px 10px;background:#fff}
+.hz small{display:block;color:#888;font-size:8px;text-transform:uppercase;letter-spacing:.04em}
+.hz b{font-size:13px;color:var(--navy);font-weight:600}
+.hz em{font-style:normal;color:#777;font-size:9px;margin-left:4px}
+.hz .tst{background:var(--navy);border-color:var(--navy)}
+.hz .tst small{color:rgba(255,255,255,.75)}
+.hz .tst b{color:#fff;font-size:17px}
+.hz .tst em{color:rgba(255,255,255,.75)}
 .kv{display:grid;grid-template-columns:170px 1fr;border:1px solid #eee;border-radius:5px;overflow:hidden}
 .kv div{padding:3px 7px;border-bottom:1px solid #f1f1f1}
 .kv div:nth-child(odd){background:#f2f6fb;color:#555}
@@ -1444,22 +1462,28 @@ function reportBlocks(){
   if(A.copie==="Oui") cs.push(["Copie du compte rendu à",copies.length?copies.map(esc).join("<br>"):"Oui (non précisé)"]);
   B.push(`<div class="rb"><h4>Votre consultation</h4>${kv([["Motif de consultation",`<span style="white-space:pre-wrap">${fmt(A.motif)}</span>`]])}<div style="height:5px"></div>${ig(cs)}</div>`);
   const no=v=>v==null||v===""||(Array.isArray(v)&&!v.length);
-  B.push(`<div class="rb"><h4>Votre sommeil</h4>${ig([
-    ["Ronflement",fmt(A.ronfle),A.ronfle==="Oui, fortement"],["Arrêts respiratoires constatés",fmt(A.apnees),A.apnees==="Oui"],["Réveils avec étouffement",fmt(A.etouff),A.etouff==="Oui"],
-    ["Sommeil réparateur",fmt(A.repar),A.repar==="Non"],["Au réveil",fmt(A.reveil),!no(A.reveil)&&!(A.reveil||[]).includes("Aucun")],["Nycturie",fmt(A.nycturie),A.nycturie==="2 fois"||A.nycturie==="3 fois ou plus"]],3)}${ig([
-    ["Horaires coucher → lever", `Semaine : ${A.couch_sem||A.lever_sem ? fmt(A.couch_sem)+" → "+fmt(A.lever_sem) : fmt(null)} · Week-end : ${A.couch_we||A.lever_we ? fmt(A.couch_we)+" → "+fmt(A.lever_we) : fmt(null)}`],
-    ["Temps de sommeil moyen estimé", (()=>{ const st=sleepTimes(); return st.moy!=null ? `${fmtDur(st.moy)}${st.s!=null&&st.w!=null?`<span style="font-weight:400;color:#666"> (semaine ${fmtDur(st.s)}, week-end ${fmtDur(st.w)})</span>`:""}` : fmt(null); })()]],2)}</div>`);
+  // éléments pathologiques à gauche (encadré), le reste à droite en petites étiquettes grises
+  const sp=cells=>{ const P=cells.filter(c=>c[2]), N=cells.filter(c=>!c[2]);
+    return `<div class="sp"><div class="pos">${P.length?P.map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join(""):`<i>Rien de particulier</i>`}</div><div class="neg">${N.map(([k,v])=>`<span>${k} : ${v}</span>`).join("")}</div></div>`; };
+  const st=sleepTimes(), hor=(c,l,d)=>c||l ? `<b>${fmt(c)} → ${fmt(l)}</b>${d!=null?`<em>${fmtDur(d)}</em>`:""}` : `<b>${fmt(null)}</b>`;
+  B.push(`<div class="rb"><h4>Horaires et temps de sommeil</h4><div class="hz">
+    <div><small>En semaine · coucher → lever</small>${hor(A.couch_sem,A.lever_sem,st.s)}</div>
+    <div><small>Week-end · coucher → lever</small>${hor(A.couch_we,A.lever_we,st.w)}</div>
+    <div class="tst"><small>Temps de sommeil moyen estimé</small><b>${st.moy!=null?fmtDur(st.moy):"—"}</b>${st.s!=null&&st.w!=null?`<em>5 j sem. + 2 j WE</em>`:""}</div></div></div>`);
+  B.push(`<div class="rb"><h4>Votre sommeil</h4>${sp([
+    ["Ronflement",fmt(A.ronfle),A.ronfle==="Oui, fortement"||A.ronfle==="Oui, légèrement"],["Arrêts respiratoires constatés",fmt(A.apnees),A.apnees==="Oui"],["Réveils avec étouffement",fmt(A.etouff),A.etouff==="Oui"],
+    ["Sommeil réparateur",fmt(A.repar),A.repar==="Non"],["Au réveil",fmt(A.reveil),!no(A.reveil)&&!(A.reveil||[]).includes("Aucun")],["Nycturie",fmt(A.nycturie),A.nycturie==="2 fois"||A.nycturie==="3 fois ou plus"]])}</div>`);
   const atcdOk=!no(A.atcd)&&!(A.atcd||[]).includes("Aucune"), traiteOk=!no(A.traite)&&!(A.traite||[]).includes("Non");
-  B.push(`<div class="rb"><h4>Antécédents et traitements</h4>${ig([
+  B.push(`<div class="rb"><h4>Antécédents et traitements</h4>${sp([
     ["Maladies",fmt(A.atcd),atcdOk],
     ["Antécédents familiaux d’apnée du sommeil",fmt(A.atcdfam)+(A.atcdfam==="Oui"&&A.atcdfam_detail?" : "+esc(A.atcdfam_detail):""),A.atcdfam==="Oui"],
-    ["Hypnotique / anxiolytique / morphinique",fmt(A.ttt)+(A.ttt==="Oui"&&A.ttt_detail?" : "+esc(A.ttt_detail):""),A.ttt==="Oui"]],3)}${ig([
+    ["Hypnotique / anxiolytique / morphinique",fmt(A.ttt)+(A.ttt==="Oui"&&A.ttt_detail?" : "+esc(A.ttt_detail):""),A.ttt==="Oui"],
     ["Examen du sommeil antérieur",fmt(A.examen)+(A.examen_detail?" ("+esc(A.examen_detail)+")":""),A.examen==="Polygraphie"||A.examen==="Polysomnographie"],
-    ["Traitement antérieur du SAOS",fmt(A.traite)+(A.traite_autre?" ("+esc(A.traite_autre)+")":""),traiteOk]],2)}</div>`);
-  B.push(`<div class="rb"><h4>Somnolence et conduite</h4>${ig([
+    ["Traitement antérieur du SAOS",fmt(A.traite)+(A.traite_autre?" ("+esc(A.traite_autre)+")":""),traiteOk]])}</div>`);
+  B.push(`<div class="rb"><h4>Somnolence et conduite</h4>${sp([
     ["Lutte contre le sommeil au volant",fmt(A.lutte),A.lutte==="Régulièrement"],
     ["Accident / quasi-accident par endormissement",fmt(A.accident),A.accident==="Oui"],
-    ["Conduite professionnelle",fmt(A.conduitepro)+(A.conduitepro==="Oui"&&A.conduitepro_detail?" ("+esc(A.conduitepro_detail)+")":""),A.conduitepro==="Oui"]],3)}</div>`);
+    ["Conduite professionnelle",fmt(A.conduitepro)+(A.conduitepro==="Oui"&&A.conduitepro_detail?" ("+esc(A.conduitepro_detail)+")":""),A.conduitepro==="Oui"]])}</div>`);
   B.push(`<div class="rb p2"><h4>Échelle de somnolence d’Epworth</h4><table class="rt"><tr><th>Situation</th>${[0,1,2,3].map(v=>`<th>${v}</th>`).join("")}</tr>
     ${EPW.map((t,j)=>`<tr class="${A["ep"+(j+1)]===undefined?"na":""}"><td>${t}</td>${circ("ep"+(j+1),3)}</tr>`).join("")}</table>
     <div class="rtot">Total : ${e.n?e.s:"—"} / 24 ${e.n?"– "+epwInt(e.s):""}</div></div>`);
