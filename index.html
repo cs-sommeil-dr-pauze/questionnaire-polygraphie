@@ -717,6 +717,7 @@ textarea.inp{min-height:110px;resize:vertical}
 .rpage{width:794px;height:1123px;background:#fff;padding:28px 38px 24px;display:flex;flex-direction:column;font-family:Lexend,sans-serif;color:#1f1e45;font-size:10px;line-height:1.35;overflow:hidden}
 .rhead{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--pink);padding-bottom:7px;margin-bottom:10px}
 .rhead img{height:38px}
+.rhead img.ap{height:42px}
 .rhead .m{flex:1}
 .rhead .m b{display:block;font-size:13px;color:var(--navy)}
 .rhead .m span{color:var(--pink);font-size:9.5px}
@@ -1537,7 +1538,7 @@ async function buildPages(){
   const blocks=reportBlocks(); const pages=[];
   const nom = esc(A.nom||"");
   const newPage=()=>{ const p=document.createElement("div"); p.className="rpage";
-    p.innerHTML=`<div class="rhead"><img src="${IMG.pmbsmall}"><div class="m"><b>Livret de questionnaires avant consultation</b><span>${CABINET.medecin}</span></div><div class="p">${nom}<br><span class="pn"></span></div></div><div class="rbody"></div><div class="rfoot"><span>Document rempli en ligne par le patient le ${new Date().toLocaleDateString("fr-FR")} – ne remplace pas une consultation médicale.</span><span class="pn2"></span></div>`;
+    p.innerHTML=`<div class="rhead"><img src="${IMG.pmbsmall}"><div class="m"><b>Livret de questionnaires avant consultation</b><span>${CABINET.medecin}</span></div><img class="ap" src="${IMG.ap}" alt=""><div class="p">${nom}<br><span class="pn"></span></div></div><div class="rbody"></div><div class="rfoot"><span>Document rempli en ligne par le patient le ${new Date().toLocaleDateString("fr-FR")} – ne remplace pas une consultation médicale.</span><span class="pn2"></span></div>`;
     R.appendChild(p); pages.push(p); return $(".rbody",p); };
   // Page 1 : tout le recueil ; page 2 : les grilles Epworth, ISI, Hamilton. Toujours 2 pages.
   const els=blocks.map(html=>{ const d=document.createElement("div"); d.innerHTML=html; return d.firstElementChild; });
