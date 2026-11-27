@@ -875,7 +875,7 @@ textarea.inp{min-height:110px;resize:vertical}
     <div class="field"><label for="f_adnom">Nom du médecin qui vous adresse</label><input id="f_adnom" class="inp" data-field="adresse_nom" placeholder="Ex. : Dr Martin"></div>
     <div class="field"><label for="f_adville">Ville</label><input id="f_adville" class="inp" data-field="adresse_ville" placeholder="Ex. : Nice"></div>
    </div>
-   <div class="alert on" data-show-q="adresse=Initiative personnelle">📄 <b>Un courrier de votre médecin traitant est obligatoire</b> pour prendre rendez-vous. Merci de nous le transmettre avant la consultation (par Doctolib ou par e-mail).</div>
+   <div class="alert on" data-show-q="adresse=Initiative personnelle">📄 <b>Un courrier de votre médecin traitant est obligatoire</b> pour prendre rendez-vous. Merci de nous le transmettre <b>en priorité avant la consultation, par Doctolib ou par e-mail</b>, avec votre questionnaire.</div>
   </div>
   <div class="q" data-show-q="adresse!=Médecin traitant">
    <label for="f_mt">Nom de votre médecin traitant <span class="hint">(s’il ne vous adresse pas lui-même)</span></label>
@@ -889,6 +889,7 @@ textarea.inp{min-height:110px;resize:vertical}
    </div>
   </div>
   <div class="q"><label for="f_motif">Pourquoi consultez-vous ?</label>
+   <p class="hint" style="margin:2px 0 8px">Décrivez avec vos propres mots ce qui vous gêne : vos symptômes, depuis quand, et ce que cela change dans votre quotidien (travail, conduite, couple…). Quelques lignes suffisent.</p>
    <textarea id="f_motif" class="inp" data-field="motif" placeholder="Ex. : je ronfle fort, ma conjointe a remarqué des pauses respiratoires, je suis fatigué(e) dans la journée…"></textarea>
    <div class="dict"><button class="btn g" id="dictbtn" type="button">🎤 Dicter ma réponse</button><span class="live" id="dictlive"></span></div>
   </div>
@@ -935,7 +936,7 @@ textarea.inp{min-height:110px;resize:vertical}
   <div class="q"><div class="ql">Y a-t-il des cas d’apnée du sommeil dans votre famille ? <span class="hint">(parents, frères et sœurs, enfants)</span></div>
    <div class="chips" data-name="atcdfam" data-opts="Non|Oui|Je ne sais pas"></div>
    <div class="sub" data-show="atcdfam=Oui"><input class="inp" data-field="atcdfam_detail" placeholder="Qui ? (ex. : père, sœur…)"></div></div>
-  <div class="q"><div class="ql">Prenez-vous régulièrement un traitement pour dormir, un anxiolytique ou un morphinique ? <span class="hint">(ex. : Stilnox, zopiclone, alprazolam, tramadol, codéine…)</span></div>
+  <div class="q"><div class="ql">Prenez-vous régulièrement un traitement pour dormir, un anxiolytique, un antidépresseur ou un morphinique ? <span class="hint">(ex. : Stilnox, zopiclone, alprazolam, sertraline, tramadol, codéine…)</span></div>
    <div class="chips" data-name="ttt" data-opts="Non|Oui"></div>
    <div class="sub" data-show="ttt=Oui"><input class="inp" data-field="ttt_detail" placeholder="Préciser le(s) médicament(s) et la dose"></div></div>
   <div class="q"><div class="ql">Avez-vous déjà réalisé un examen du sommeil ?</div>
@@ -1503,7 +1504,7 @@ function reportBlocks(){
     ["Sommeil réparateur",fmt(A.repar),A.repar==="Non"],["Au réveil",fmt(A.reveil),!no(A.reveil)&&!(A.reveil||[]).includes("Aucun")],["Nycturie",fmt(A.nycturie),A.nycturie==="2 fois"||A.nycturie==="3 fois ou plus"]])}</div>`);
   const atcdOk=!no(A.atcd)&&!(A.atcd||[]).includes("Aucune"), traiteOk=!no(A.traite)&&!(A.traite||[]).includes("Non");
   const psy = A.ttt==="Oui" ? `<b>OUI</b>${A.ttt_detail?" – "+esc(A.ttt_detail):" (non précisé)"}` : A.ttt==="Non" ? "<b>NON</b>" : fmt(null);
-  B.push(`<div class="rb"><h4>Antécédents et traitements</h4><div class="psy${A.ttt==="Oui"?" on":""}">💊 Psychotropes / morphiniques (somnifère, anxiolytique, opioïde) : ${psy}</div>${sp([
+  B.push(`<div class="rb"><h4>Antécédents et traitements</h4><div class="psy${A.ttt==="Oui"?" on":""}">💊 Psychotropes / morphiniques (somnifère, anxiolytique, antidépresseur, opioïde) : ${psy}</div>${sp([
     ["Maladies",fmt(A.atcd),atcdOk],
     ["Antécédents familiaux d’apnée du sommeil",fmt(A.atcdfam)+(A.atcdfam==="Oui"&&A.atcdfam_detail?" : "+esc(A.atcdfam_detail):""),A.atcdfam==="Oui"],
     ["Examen du sommeil antérieur",fmt(A.examen)+(A.examen_detail?" ("+esc(A.examen_detail)+")":""),A.examen==="Polygraphie"||A.examen==="Polysomnographie"],
