@@ -742,6 +742,9 @@ textarea.inp{min-height:110px;resize:vertical}
 .ig small{display:block;color:#888;font-size:8px;line-height:1.25}
 .ig b{font-size:10px;font-weight:600}
 .ig .ab b{color:var(--pink)}
+.psy{border:1px solid var(--rose);border-radius:6px;padding:3px 9px;margin-bottom:4px;background:#fff;font-size:10px}
+.psy b{color:var(--navy)}
+.psy.on{border-left:3px solid var(--pink);background:var(--rose3)}
 .sp{display:grid;grid-template-columns:1.3fr 1fr;gap:8px;align-items:start}
 .sp .pos{border-left:3px solid var(--pink);background:var(--rose3);border-radius:0 6px 6px 0;padding:3px 9px}
 .sp .pos div{display:grid;grid-template-columns:44% 1fr;gap:6px;padding:1.5px 0;border-bottom:1px dotted var(--rose)}
@@ -872,6 +875,7 @@ textarea.inp{min-height:110px;resize:vertical}
     <div class="field"><label for="f_adnom">Nom du médecin qui vous adresse</label><input id="f_adnom" class="inp" data-field="adresse_nom" placeholder="Ex. : Dr Martin"></div>
     <div class="field"><label for="f_adville">Ville</label><input id="f_adville" class="inp" data-field="adresse_ville" placeholder="Ex. : Nice"></div>
    </div>
+   <div class="alert on" data-show-q="adresse=Initiative personnelle">📄 <b>Un courrier de votre médecin traitant est obligatoire</b> pour prendre rendez-vous. Merci de nous le transmettre avant la consultation (par Doctolib ou par e-mail).</div>
   </div>
   <div class="q" data-show-q="adresse!=Médecin traitant">
    <label for="f_mt">Nom de votre médecin traitant <span class="hint">(s’il ne vous adresse pas lui-même)</span></label>
@@ -931,13 +935,13 @@ textarea.inp{min-height:110px;resize:vertical}
   <div class="q"><div class="ql">Y a-t-il des cas d’apnée du sommeil dans votre famille ? <span class="hint">(parents, frères et sœurs, enfants)</span></div>
    <div class="chips" data-name="atcdfam" data-opts="Non|Oui|Je ne sais pas"></div>
    <div class="sub" data-show="atcdfam=Oui"><input class="inp" data-field="atcdfam_detail" placeholder="Qui ? (ex. : père, sœur…)"></div></div>
-  <div class="q"><div class="ql">Prenez-vous régulièrement un traitement pour dormir, un anxiolytique ou un morphinique ?</div>
+  <div class="q"><div class="ql">Prenez-vous régulièrement un traitement pour dormir, un anxiolytique ou un morphinique ? <span class="hint">(ex. : Stilnox, zopiclone, alprazolam, tramadol, codéine…)</span></div>
    <div class="chips" data-name="ttt" data-opts="Non|Oui"></div>
    <div class="sub" data-show="ttt=Oui"><input class="inp" data-field="ttt_detail" placeholder="Préciser le(s) médicament(s) et la dose"></div></div>
   <div class="q"><div class="ql">Avez-vous déjà réalisé un examen du sommeil ?</div>
    <div class="chips" data-name="examen" data-opts="Non|Polygraphie|Polysomnographie|Je ne sais pas"></div>
    <div class="sub" data-show="examen=Polygraphie|Polysomnographie"><input class="inp" data-field="examen_detail" placeholder="Année et lieu, si vous vous en souvenez"></div></div>
-  <div class="q"><div class="ql">Avez-vous déjà été traité(e) pour une apnée du sommeil ?</div>
+  <div class="q" data-show-q="examen!=Non"><div class="ql">Avez-vous déjà été traité(e) pour une apnée du sommeil ?</div>
    <div class="chips multi" data-name="traite" data-multi="1" data-excl="Non" data-opts="Non|PPC|Orthèse mandibulaire|Chirurgie ORL|Autre"></div>
    <div class="sub" data-show="traite=Autre"><input class="inp" data-field="traite_autre" placeholder="Préciser"></div></div>
  </div>
@@ -971,6 +975,15 @@ textarea.inp{min-height:110px;resize:vertical}
   <div class="q"><div class="ql">Avez-vous déjà eu un accident ou un quasi-accident lié à un endormissement ?</div><div class="chips" data-name="accident" data-opts="Non|Oui"></div></div>
   <div class="q"><div class="ql">Conduisez-vous dans le cadre de votre profession ?</div><div class="chips" data-name="conduitepro" data-opts="Non|Oui"></div>
    <div class="sub" data-show="conduitepro=Oui"><input class="inp" data-field="conduitepro_detail" placeholder="Type de véhicule (VL, poids lourd, transport de personnes…)"></div></div>
+  <div id="bossq" style="display:none">
+   <h3 class="sec">Somnolence au volant (échelle BOSS)</h3>
+   <p class="hint" style="margin-top:-6px">Quelques questions complémentaires, car vous avez signalé une somnolence dans la journée ou une conduite professionnelle.</p>
+   <div class="q"><div class="ql">Combien de kilomètres parcourez-vous par an, environ ?</div><div class="chips" data-name="boss_km" data-opts="Moins de 20 000 km/an|20 000 km/an ou plus"></div></div>
+   <div class="q"><div class="ql">Vous arrive-t-il de somnoler ou de vous endormir, et pas seulement de vous sentir fatigué(e), dans une voiture immobilisée depuis quelques minutes ?</div><div class="chips" data-name="boss_immo" data-opts="Aucune chance de somnoler|Faible chance de s’endormir|Chance moyenne de s’endormir|Forte chance de s’endormir"></div>
+    <div class="hint" id="bosspre" style="display:none;margin-top:6px">Pré-rempli d’après votre réponse à l’échelle d’Epworth (voiture immobilisée) : vous pouvez la modifier.</div></div>
+   <div class="q"><div class="ql">Au cours de l’année passée, avez-vous eu au moins un épisode de somnolence au volant qui a rendu la conduite difficile ou qui vous a forcé(e) à vous arrêter ?</div><div class="chips" data-name="boss_epi" data-opts="Non, jamais|Oui, mais moins d’une fois par mois|Oui, au moins une fois par mois|Oui, au moins une fois par semaine"></div></div>
+   <div class="calc" id="bosstot"></div>
+  </div>
   <div class="alert" id="drivealert">⚠️ <b>Par sécurité :</b> si vous ressentez de la somnolence au volant, évitez de conduire jusqu’à la consultation, faites des pauses régulières et ne prenez pas la route fatigué(e). Nous en parlerons ensemble.</div>
  </div>
 </section>
@@ -1104,6 +1117,11 @@ const ISI = [
   {n:"5",t:"Jusqu’à quel point êtes-vous INQUIET(E) / PRÉOCCUPÉ(E) à propos de vos difficultés de sommeil ?",id:"isi5"}
 ];
 const ISI_KEYS = ["isi1a","isi1b","isi1c","isi2","isi3","isi4","isi5"];
+// Échelle BOSS (Bordeaux Sleepiness Scale, SANPSY – CHU de Bordeaux) : genre + km/an + voiture immobilisée + épisodes ; total 0–8, risque si ≥ 3
+const BOSS_KM="Moins de 20 000 km/an|20 000 km/an ou plus".split("|"), BOSS_IMMO="Aucune chance de somnoler|Faible chance de s’endormir|Chance moyenne de s’endormir|Forte chance de s’endormir".split("|"), BOSS_EPI="Non, jamais|Oui, mais moins d’une fois par mois|Oui, au moins une fois par mois|Oui, au moins une fois par semaine".split("|");
+function boss(){ const p=[A.sexe?(A.sexe==="Un homme"?1:0):-1, BOSS_KM.indexOf(A.boss_km), BOSS_IMMO.indexOf(A.boss_immo), BOSS_EPI.indexOf(A.boss_epi)];
+  const n=p.filter(x=>x>=0).length; return {s:p.reduce((a,x)=>a+Math.max(x,0),0), n, ok:n===4}; }
+function bossShown(){ return A.lutte!=="Je ne conduis pas" && (sum(EPK).s>10 || A.conduitepro==="Oui"); }
 const ISI2H = {isi1a:"h4", isi1b:"h5", isi1c:"h6"};
 const HAM = [
   ["Humeur dépriméE","Tristesse, moral bas, découragement, sensation de vide"],
@@ -1193,6 +1211,8 @@ document.addEventListener("click", e=>{
   const hm = A._hman || (A._hman = {});
   if(ISI2H[k]){ const hk=ISI2H[k]; if(!hm[hk]){ if(A[k]===undefined) delete A[hk]; else A[hk]=A[k]; } }
   else if(Object.values(ISI2H).includes(k)) hm[k]=1;
+  if(k==="ep8" && !hm.boss_immo){ if(A.ep8===undefined) delete A.boss_immo; else A.boss_immo=BOSS_IMMO[A.ep8]; }
+  else if(k==="boss_immo") hm.boss_immo=1;
   save(); refresh();
   // passage automatique à la ligne suivante dans les grilles
   const row = b.closest("[data-row]");
@@ -1310,7 +1330,11 @@ function refresh(fromInput){
   const h=sum(HK); $("#ham_tot").textContent = h.n? h.s : "–";
   $("#hpre").style.display = Object.entries(ISI2H).some(([i,h])=>A[i]!==undefined && !(A._hman||{})[h]) ? "" : "none";
   $("#suicalert").classList.toggle("on", (A.h3||0)>=1);
-  $("#drivealert").classList.toggle("on", A.lutte==="Régulièrement" || A.accident==="Oui");
+  const bo=boss(), bsh=bossShown();
+  $("#bossq").style.display = bsh ? "" : "none";
+  $("#bosspre").style.display = A.boss_immo && !(A._hman||{}).boss_immo ? "" : "none";
+  $("#bosstot").innerHTML = bo.ok ? `Score BOSS : <b>${bo.s} / 8</b>` : "";
+  $("#drivealert").classList.toggle("on", A.lutte==="Régulièrement" || A.accident==="Oui" || (bsh && bo.ok && bo.s>=3));
   const st=sleepTimes(); $("#tst").innerHTML = st.moy!=null ? `Temps de sommeil moyen estimé (coucher → lever) : <b>${fmtDur(st.moy)}</b>${st.s!=null&&st.w!=null?` <span class="hint">(semaine ${fmtDur(st.s)} · week-end ${fmtDur(st.w)})</span>`:""}` : "";
   const m=imc(); $("#imc").innerHTML = m? `Indice de masse corporelle : <b>${m.toFixed(1).replace(".",",")} kg/m²</b>` : "";
   $("#h_nom").textContent = A.nom || "…"; $("#h_date").textContent = new Date().toLocaleDateString("fr-FR");
@@ -1393,6 +1417,7 @@ function synthese(){
   if((A.h3||0)>=1) al.push(`Idées suicidaires cotées ${A.h3}/4 (Hamilton) – à évaluer en priorité`);
   if(A.lutte==="Régulièrement") al.push("Lutte régulière contre le sommeil au volant");
   if(A.accident==="Oui") al.push("Accident ou quasi-accident par endormissement");
+  const bo=boss(); if(bossShown() && bo.ok && bo.s>=3) al.push(`BOSS ${bo.s}/8 : risque d’accident lié à la somnolence`);
   if(A.conduitepro==="Oui" && (A.lutte==="Régulièrement"||A.accident==="Oui"||e.s>10)) al.push("Conducteur professionnel"+(A.conduitepro_detail?` (${esc(A.conduitepro_detail)})`:""));
   // La nuit
   const nuit=[];
@@ -1426,9 +1451,10 @@ function synthese(){
   const at=(A.atcd||[]).filter(x=>x!=="Aucune").map(x=>x.replace(/ \(.*\)/,""));
   if(at.length) ter.push(B(uc(list(at.map(lc)))));
   if(A.atcdfam==="Oui") ter.push(`ATCD familial de SAOS${A.atcdfam_detail?` (${esc(A.atcdfam_detail)})`:""}`);
-  if(A.ttt==="Oui") ter.push(`Traitement sédatif : ${A.ttt_detail?esc(A.ttt_detail):"oui"}`);
+  if(A.ttt==="Oui") ter.push(`${B("Psychotropes / morphiniques")} : ${A.ttt_detail?esc(A.ttt_detail):"oui"}`);
+  else if(A.ttt==="Non") ter.push("Ni psychotrope ni morphinique");
   if(A.examen && A.examen!=="Non" && A.examen!=="Je ne sais pas") ter.push(`${A.examen} antérieure${A.examen_detail?` (${esc(A.examen_detail)})`:""}`);
-  const tr=(A.traite||[]).filter(x=>x!=="Non");
+  const tr=A.examen&&A.examen!=="Non" ? (A.traite||[]).filter(x=>x!=="Non") : [];
   if(tr.length) ter.push(`Déjà traité${ee} : ${list(tr.map(x=>x==="Autre"&&A.traite_autre?esc(A.traite_autre):x))}`);
   const cell=(t,a)=>`<div class="c"><h5>${t}</h5>${a.length?`<ul>${a.map(x=>`<li>${x}</li>`).join("")}</ul>`:`<div class="none">Rien de notable</div>`}</div>`;
   return `<div class="rsyn">${hd}${al.length?`<div class="al">⚠ ${al.join(" · ")}</div>`:""}<div class="g4">${cell("La nuit",nuit)}${cell("Le jour",jour)}${cell("Humeur",hum)}${cell("Terrain",ter)}</div></div>`;
@@ -1476,16 +1502,21 @@ function reportBlocks(){
     ["Ronflement",fmt(A.ronfle),A.ronfle==="Oui, fortement"||A.ronfle==="Oui, légèrement"],["Arrêts respiratoires constatés",fmt(A.apnees),A.apnees==="Oui"],["Réveils avec étouffement",fmt(A.etouff),A.etouff==="Oui"],
     ["Sommeil réparateur",fmt(A.repar),A.repar==="Non"],["Au réveil",fmt(A.reveil),!no(A.reveil)&&!(A.reveil||[]).includes("Aucun")],["Nycturie",fmt(A.nycturie),A.nycturie==="2 fois"||A.nycturie==="3 fois ou plus"]])}</div>`);
   const atcdOk=!no(A.atcd)&&!(A.atcd||[]).includes("Aucune"), traiteOk=!no(A.traite)&&!(A.traite||[]).includes("Non");
-  B.push(`<div class="rb"><h4>Antécédents et traitements</h4>${sp([
+  const psy = A.ttt==="Oui" ? `<b>OUI</b>${A.ttt_detail?" – "+esc(A.ttt_detail):" (non précisé)"}` : A.ttt==="Non" ? "<b>NON</b>" : fmt(null);
+  B.push(`<div class="rb"><h4>Antécédents et traitements</h4><div class="psy${A.ttt==="Oui"?" on":""}">💊 Psychotropes / morphiniques (somnifère, anxiolytique, opioïde) : ${psy}</div>${sp([
     ["Maladies",fmt(A.atcd),atcdOk],
     ["Antécédents familiaux d’apnée du sommeil",fmt(A.atcdfam)+(A.atcdfam==="Oui"&&A.atcdfam_detail?" : "+esc(A.atcdfam_detail):""),A.atcdfam==="Oui"],
-    ["Hypnotique / anxiolytique / morphinique",fmt(A.ttt)+(A.ttt==="Oui"&&A.ttt_detail?" : "+esc(A.ttt_detail):""),A.ttt==="Oui"],
     ["Examen du sommeil antérieur",fmt(A.examen)+(A.examen_detail?" ("+esc(A.examen_detail)+")":""),A.examen==="Polygraphie"||A.examen==="Polysomnographie"],
-    ["Traitement antérieur du SAOS",fmt(A.traite)+(A.traite_autre?" ("+esc(A.traite_autre)+")":""),traiteOk]])}</div>`);
+    ...(A.examen==="Non"?[]:[["Traitement antérieur du SAOS",fmt(A.traite)+(A.traite_autre?" ("+esc(A.traite_autre)+")":""),traiteOk]])])}</div>`);
+  const bo=boss();
   B.push(`<div class="rb"><h4>Somnolence et conduite</h4>${sp([
     ["Lutte contre le sommeil au volant",fmt(A.lutte),A.lutte==="Régulièrement"],
     ["Accident / quasi-accident par endormissement",fmt(A.accident),A.accident==="Oui"],
-    ["Conduite professionnelle",fmt(A.conduitepro)+(A.conduitepro==="Oui"&&A.conduitepro_detail?" ("+esc(A.conduitepro_detail)+")":""),A.conduitepro==="Oui"]])}</div>`);
+    ["Conduite professionnelle",fmt(A.conduitepro)+(A.conduitepro==="Oui"&&A.conduitepro_detail?" ("+esc(A.conduitepro_detail)+")":""),A.conduitepro==="Oui"],
+    ...(bossShown()?[["Score BOSS (somnolence au volant)",bo.ok?`${bo.s} / 8${bo.s>=3?" – risque d’accident":""}`:`incomplet (${bo.n}/4)`,bo.ok&&bo.s>=3],
+      ["Kilométrage annuel",fmt(A.boss_km),A.boss_km===BOSS_KM[1]],
+      ["Somnole en voiture immobilisée",fmt(A.boss_immo),BOSS_IMMO.indexOf(A.boss_immo)>=2],
+      ["Épisode de somnolence au volant (12 mois)",fmt(A.boss_epi),BOSS_EPI.indexOf(A.boss_epi)>=1]]:[])])}</div>`);
   B.push(`<div class="rb p2"><h4>Échelle de somnolence d’Epworth</h4><table class="rt"><tr><th>Situation</th>${[0,1,2,3].map(v=>`<th>${v}</th>`).join("")}</tr>
     ${EPW.map((t,j)=>`<tr class="${A["ep"+(j+1)]===undefined?"na":""}"><td>${t}</td>${circ("ep"+(j+1),3)}</tr>`).join("")}</table>
     <div class="rtot">Total : ${e.n?e.s:"—"} / 24 ${e.n?"– "+epwInt(e.s):""}</div></div>`);
