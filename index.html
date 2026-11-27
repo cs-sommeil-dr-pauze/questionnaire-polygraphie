@@ -1331,6 +1331,8 @@ function refresh(fromInput){
   const h=sum(HK); $("#ham_tot").textContent = h.n? h.s : "–";
   $("#hpre").style.display = Object.entries(ISI2H).some(([i,h])=>A[i]!==undefined && !(A._hman||{})[h]) ? "" : "none";
   $("#suicalert").classList.toggle("on", (A.h3||0)>=1);
+  // BOSS « voiture immobilisée » = Epworth situation 8 : pré-remplissage aussi pour une réponse Epworth déjà enregistrée
+  if(typeof A.ep8==="number" && A.boss_immo===undefined && !(A._hman||{}).boss_immo) A.boss_immo=BOSS_IMMO[A.ep8];
   const bo=boss(), bsh=bossShown();
   $("#bossq").style.display = bsh ? "" : "none";
   $("#bosspre").style.display = A.boss_immo && !(A._hman||{}).boss_immo ? "" : "none";
