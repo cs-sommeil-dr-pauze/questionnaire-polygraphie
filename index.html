@@ -715,15 +715,16 @@ textarea.inp{min-height:110px;resize:vertical}
 /* ---------- Rapport PDF (hors écran) ---------- */
 #report{position:absolute;left:-12000px;top:0}
 .rpage{width:794px;height:1123px;background:#fff;padding:28px 38px 24px;display:flex;flex-direction:column;font-family:Lexend,sans-serif;color:#1f1e45;font-size:10px;line-height:1.35;overflow:hidden}
-.rhead{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--pink);padding-bottom:7px;margin-bottom:10px}
+.rhead{display:flex;align-items:center;gap:12px;border-bottom:3px solid var(--navy);padding-bottom:7px;margin-bottom:10px}
 .rhead img{height:38px}
 .rhead img.ap{height:42px}
 .rhead .m{flex:1}
+.rhead .sep{width:2px;height:30px;background:var(--pink)}
 .rhead .m b{display:block;font-size:13px;color:var(--navy)}
 .rhead .m span{color:var(--pink);font-size:9.5px}
 .rhead .p{text-align:right;font-size:9.5px;color:#666}
 .rbody{flex:1;overflow:hidden}
-.rfoot{border-top:1px solid #eee;padding-top:5px;font-size:8px;color:#888;display:flex;justify-content:space-between}
+.rfoot{border-top:1px solid var(--navy);padding-top:5px;font-size:8px;color:#555;font-style:italic;display:flex;justify-content:space-between}
 .rb{margin-bottom:8px}
 .rb h4{margin:0 0 4px;font-size:11px;color:#fff;background:var(--navy);padding:3px 9px;border-radius:5px;font-weight:600}
 .rb h4.pkh{background:var(--pink)}
@@ -764,6 +765,43 @@ textarea.inp{min-height:110px;resize:vertical}
 .hz .tst small{color:rgba(255,255,255,.75)}
 .hz .tst b{color:#fff;font-size:17px}
 .hz .tst em{color:rgba(255,255,255,.75)}
+.xtitle{margin:0 0 8px}.xtitle h1{margin:0;font-size:19px;color:var(--navy);font-weight:700}.xtitle i{display:block;width:80px;height:3px;background:var(--pink);margin-top:3px}
+.xcard{border:1.5px solid var(--navy);border-radius:4px;padding:0 0 5px;margin-bottom:8px;background:#fff}
+.xcard>h2{position:relative;display:inline-block;margin:-1px 0 5px -1px;height:19px;line-height:19px;background:var(--navy);color:#fff;font-size:11px;font-weight:600;padding:0 10px}
+.xcard>h2::after{content:"";position:absolute;right:-12px;top:0;border-top:19px solid var(--navy);border-right:12px solid transparent}
+.xcard.pk{border-color:var(--pink)}.xcard.pk>h2{background:var(--pink)}.xcard.pk>h2::after{border-top-color:var(--pink)}
+.xkv{display:grid;grid-template-columns:39% 1fr;margin:0 7px}
+.xkv div{padding:2px 6px;border-bottom:2px solid #fff;background:#eef0f5}
+.xkv div:nth-child(odd){font-weight:600}.xkv div:nth-child(even){background:#f6f7fa}
+.xkv .im{color:var(--pink);font-weight:700}
+.xtop{display:grid;grid-template-columns:1fr 1.45fr;gap:12px;align-items:stretch;margin-bottom:0}
+.xtop>.l{display:flex;flex-direction:column}
+.xtop>.l .xcard:last-child{flex:1}
+.xtop>.xcard{margin-bottom:8px}
+.xrow{display:grid;gap:12px;align-items:start}
+.rsyn{border:0;border-radius:0;padding:0 8px 2px;background:none}
+.rsyn .c{background:#fafbfd}
+.rsyn .c h5{color:var(--pink)}
+.xsc{display:grid;gap:5px;margin:0 7px 1px}
+.xsc div{border:1.5px solid #dfe1ea;border-radius:4px;text-align:center;padding:2px 4px}
+.xsc b{display:block;font-size:9.5px}.xsc strong{display:block;font-size:14px;color:var(--pink);line-height:1.15;white-space:nowrap}.xsc span{display:block;font-size:8px;color:#555;line-height:1.2}
+.xsc i{display:block;font-style:normal;font-size:8px;color:#c06a00}
+.xhz{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 7px}
+.xhz>div{border:1px solid #dfe1ea;border-radius:5px;padding:3px 9px}
+.xhz small{display:block;color:#888;font-size:7.5px;text-transform:uppercase;letter-spacing:.04em}
+.xhz b{font-size:12px;color:var(--navy)}.xhz em{font-style:normal;color:#777;font-size:9px;margin-left:5px}
+.xhz .tst{grid-column:1/-1;background:var(--navy);border-color:var(--navy);display:flex;align-items:baseline;gap:8px}
+.xhz .tst small,.xhz .tst em{color:rgba(255,255,255,.78)}.xhz .tst b{color:#fff;font-size:15px}
+.xpos{margin:0 7px}
+.xpos div{display:grid;grid-template-columns:42% 1fr;gap:6px;padding:2px 8px;border-left:3px solid var(--pink);border-bottom:1px solid #eef0f5;margin-bottom:1px}
+.xpos span{color:#555}.xpos b{color:var(--navy)}
+.xpos .none{border-left:0;color:#999;font-style:italic;display:block}
+.xneg{margin:3px 7px 0}
+.xneg>span{display:inline-block;border:1px solid #e3e3ea;border-radius:10px;padding:0 7px;margin:0 3px 3px 0;color:#7a7a8a;font-size:8px;background:#fff}
+.xpsy{margin:0 7px 4px;padding:2px 8px;border:1px solid #dfe1ea;border-radius:4px;font-weight:600}
+.xboss{margin:0 7px 4px;padding:3px 9px;border:1.5px solid var(--pink);border-radius:5px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.xboss b{font-size:13px;color:var(--pink)}.xboss .i{font-weight:700;color:var(--navy)}
+.xboss small{flex-basis:100%;color:#777;font-size:7.5px;line-height:1.35}
 .kv{display:grid;grid-template-columns:170px 1fr;border:1px solid #eee;border-radius:5px;overflow:hidden}
 .kv div{padding:3px 7px;border-bottom:1px solid #f1f1f1}
 .kv div:nth-child(odd){background:#f2f6fb;color:#555}
@@ -1393,6 +1431,7 @@ function buildEnd(){
 document.addEventListener("click", e=>{ const a=e.target.closest("[data-go]"); if(a){ go(+a.dataset.go); } });
 
 /* ======== Rapport PDF ======== */
+const lcf = s => String(s).charAt(0).toLowerCase()+String(s).slice(1);
 const fmt = v => v==null||v===""||(Array.isArray(v)&&!v.length) ? `<span style="color:#bbb">—</span>` : esc(Array.isArray(v)?v.join(", "):v);
 function kv(rows){ return `<div class="kv">${rows.map(([k,v])=>`<div>${k}</div><div>${v}</div>`).join("")}</div>`; }
 function circ(k,max){ let s=""; for(let v=0;v<=max;v++) s+=`<td class="c"><span class="rc${A[k]===v?" on":""}">${v}</span></td>`; return s; }
@@ -1403,7 +1442,7 @@ function synthese(){
   const list=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" et "+a[a.length-1];
   const EPS=["lecture","télévision","lieu public","passager en voiture","allongé l’après-midi","conversation","après le déjeuner","voiture à l’arrêt"];
   const fem=A.sexe==="Une femme", ee=fem?"e":"";
-  // En-tête : qui, adressé par qui, motif avec les mots du patient
+  // En-tête : qui, adressé par qui (le motif figure dans la carte « Consultation »)
   const who=[A.sexe?(fem?"Femme":"Homme"):"", ag!=null?ag+" ans":"", A.profession?esc(lc(A.profession.trim())):""].filter(Boolean).join(", ");
   let adr="";
   if(A.adresse==="Initiative personnelle") adr=`venu${ee} de sa propre initiative`;
@@ -1412,10 +1451,7 @@ function synthese(){
     const nom=[A.adresse_nom,A.adresse_ville].filter(Boolean).map(esc).join(", ");
     adr=`adressé${ee} par ${qui}${nom?` (${nom})`:""}`;
   }
-  let mot=(A.motif||"").trim().replace(/\s+/g," ");
-  if(mot.length>220) mot=mot.slice(0,217).replace(/\s\S*$/,"")+"…";
-  mot=mot.replace(/[\s.;,]+$/,"");
-  const hd=`<div class="hd"><div class="who">${[who,adr].filter(Boolean).join(" · ")||"Patient(e)"}</div>${mot?`<div class="mot">« ${esc(uc(mot))} »</div>`:`<div class="who"><i>Motif non renseigné</i></div>`}</div>`;
+  const hd=`<div class="hd"><div class="who">${[who,adr].filter(Boolean).join(" · ")||"Patient(e)"}</div></div>`;
   // Alertes
   const al=[];
   if((A.h3||0)>=1) al.push(`Idées suicidaires cotées ${A.h3}/4 (Hamilton) – à évaluer en priorité`);
@@ -1456,7 +1492,8 @@ function synthese(){
   if(at.length) ter.push(B(uc(list(at.map(lc)))));
   if(A.atcdfam==="Oui") ter.push(`ATCD familial de SAOS${A.atcdfam_detail?` (${esc(A.atcdfam_detail)})`:""}`);
   if(A.ttt==="Oui") ter.push(`${B("Psychotropes / morphiniques")} : ${A.ttt_detail?esc(A.ttt_detail):"oui"}`);
-  else if(A.ttt==="Non") ter.push("Ni psychotrope ni morphinique");
+  else if(A.ttt==="Non") ter.push(B("Psychotropes / morphiniques : non"));
+  else ter.push("Psychotropes / morphiniques : non renseigné");
   if(A.examen && A.examen!=="Non" && A.examen!=="Je ne sais pas") ter.push(`${A.examen} antérieure${A.examen_detail?` (${esc(A.examen_detail)})`:""}`);
   const tr=A.examen&&A.examen!=="Non" ? (A.traite||[]).filter(x=>x!=="Non") : [];
   if(tr.length) ter.push(`Déjà traité${ee} : ${list(tr.map(x=>x==="Autre"&&A.traite_autre?esc(A.traite_autre):x))}`);
@@ -1464,63 +1501,60 @@ function synthese(){
   return `<div class="rsyn">${hd}${al.length?`<div class="al">⚠ ${al.join(" · ")}</div>`:""}<div class="g4">${cell("La nuit",nuit)}${cell("Le jour",jour)}${cell("Humeur",hum)}${cell("Terrain",ter)}</div></div>`;
 }
 function reportBlocks(){
-  const e=sum(EPK), i=sum(ISI_KEYS), h=sum(HK), m=imc(), ag=age(), sb=stopbang();
+  const e=sum(EPK), i=sum(ISI_KEYS), h=sum(HK), m=imc(), ag=age(), bo=boss(), bsh=bossShown();
   const B=[];
   const dn = A.ddn ? new Date(A.ddn).toLocaleDateString("fr-FR") : "—";
-  const part=(r)=> r.n<r.t ? `<i style="color:#c06a00">incomplet : ${r.n}/${r.t}</i>` : "";
-  let alerts="";
-  if((A.h3||0)>=1) alerts+=`<div class="ralert">⚠ Hamilton item 3 (idées suicidaires) coté <b>${A.h3}/4</b> – à évaluer en priorité.</div>`;
-  if(A.lutte==="Régulièrement"||A.accident==="Oui") alerts+=`<div class="ralert">⚠ Somnolence au volant : lutte ${esc(A.lutte||"—")}, accident/quasi-accident ${esc(A.accident||"—")}${A.conduitepro==="Oui"?", <b>conduite professionnelle</b>"+(A.conduitepro_detail?" ("+esc(A.conduitepro_detail)+")":""):""}.</div>`;
-  B.push(`<div class="rb"><div class="rid">
-    <div style="grid-column:span 2"><small>Nom et prénom</small><b>${fmt(A.nom)}</b></div>
-    <div class="big"><small>Date de naissance${ag!=null?" (âge)":""}</small><b>${dn}${ag!=null?` (${ag} ans)`:""}</b></div>
-    <div><small>Sexe · Rempli le</small><b>${A.sexe?esc(A.sexe.replace("Un ","").replace("Une ","")):"—"} · ${new Date().toLocaleDateString("fr-FR")}</b></div>
-    <div style="grid-column:span 2"><small>Profession</small><b>${fmt(A.profession)}</b></div>
-    <div class="big"><small>Poids · Taille</small><b>${A.poids?esc(A.poids)+" kg":"—"} · ${A.taille?esc(A.taille)+" cm":"—"}</b></div>
-    <div class="imc"><small>IMC</small><b>${m?m.toFixed(1).replace(".",","):"—"}</b>${m?`<i>kg/m²</i>`:""}</div></div>
-   <h4>Synthèse globale</h4>${synthese()}
-   <h4 class="pkh" style="margin-top:10px">Synthèse des scores</h4>
-   <div class="rtiles">
-    <div><small>Epworth</small><b>${e.n?e.s:"—"}<span style="font-size:11px;color:#888"> /24</span></b><i>${e.n?epwInt(e.s):""}</i>${part(e)}</div>
-    <div><small>ISI (insomnie)</small><b>${i.n?i.s:"—"}<span style="font-size:11px;color:#888"> /28</span></b><i>${i.n?isiInt(i.s):""}</i>${part(i)}</div>
-    <div><small>Hamilton (auto, 0–4)</small><b>${h.n?h.s:"—"}<span style="font-size:11px;color:#888"> /68</span></b><i>item 3 : ${A.h3??"—"}</i>${part(h)}</div>
-   </div>${alerts}</div>`);
+  const part=(r)=> r.n<r.t ? `<i>incomplet : ${r.n}/${r.t}</i>` : "";
+  const no=v=>v==null||v===""||(Array.isArray(v)&&!v.length);
+  const card=(t,body,cls)=>`<div class="xcard${cls?" "+cls:""}"><h2>${t}</h2>${body}</div>`;
+  const xkv=rows=>`<div class="xkv">${rows.map(([k,v,c])=>`<div>${k} :</div><div${c?` class="${c}"`:""}>${v}</div>`).join("")}</div>`;
+  // signes positifs mis en avant (trait de couleur, réponse en gras), signes normaux en petites étiquettes grises
+  const sp=cells=>{ const P=cells.filter(c=>c[2]), N=cells.filter(c=>!c[2]);
+    return `<div class="xpos">${P.length?P.map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join(""):`<div class="none">Rien de particulier</div>`}</div>${N.length?`<div class="xneg">${N.map(([k,v])=>`<span>${k} : ${v}</span>`).join("")}</div>`:""}`; };
+  // 1. Titre, puis identité + consultation à gauche, synthèse clinique à droite
   const adr = (A.adresse==="Autre"&&A.adresse_autre?"Autre : "+A.adresse_autre:A.adresse);
   const adrNom = A.adresse!=="Initiative personnelle" ? [A.adresse_nom,A.adresse_ville].filter(Boolean).join(", ") : "";
   const copies = (A.copies||[]).filter(c=>(c.nom||"").trim()||(c.spe||"").trim()).map(c=>[c.nom,c.spe].filter(x=>(x||"").trim()).join(" – "));
-  const ig=(cells,n)=>`<div class="ig" style="grid-template-columns:repeat(${n||cells.length},1fr)">${cells.map(([k,v,ab])=>`<div${ab?' class="ab"':""}><small>${k}</small><b>${v}</b></div>`).join("")}</div>`;
-  const cs=[["Adressé(e) par",fmt(adr)+(adrNom?" : "+esc(adrNom):"")],
+  const cons=[["Motif",`<span style="white-space:pre-wrap">${fmt(A.motif)}</span>`],["Adressé(e) par",fmt(adr)+(adrNom?" · "+esc(adrNom):"")],
     ["Médecin traitant",A.adresse==="Médecin traitant"?"= médecin adresseur":fmt(A.medtt)]];
-  if(A.copie==="Oui") cs.push(["Copie du compte rendu à",copies.length?copies.map(esc).join("<br>"):"Oui (non précisé)"]);
-  B.push(`<div class="rb"><h4>Votre consultation</h4>${kv([["Motif de consultation",`<span style="white-space:pre-wrap">${fmt(A.motif)}</span>`]])}<div style="height:5px"></div>${ig(cs)}</div>`);
-  const no=v=>v==null||v===""||(Array.isArray(v)&&!v.length);
-  // éléments pathologiques à gauche (encadré), le reste à droite en petites étiquettes grises
-  const sp=cells=>{ const P=cells.filter(c=>c[2]), N=cells.filter(c=>!c[2]);
-    return `<div class="sp"><div class="pos">${P.length?P.map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join(""):`<i>Rien de particulier</i>`}</div><div class="neg">${N.map(([k,v])=>`<span>${k} : ${v}</span>`).join("")}</div></div>`; };
+  if(A.copie==="Oui") cons.push(["Copie à",copies.length?copies.map(esc).join("<br>"):"Oui (non précisé)"]);
+  B.push(`<div class="rb"><div class="xtitle"><h1>Évaluation préconsultation du sommeil</h1><i></i></div><div class="xtop"><div class="l">
+    ${card("Identité / anthropométrie",xkv([["Nom",`<b>${fmt(A.nom)}</b>`],["Sexe",A.sexe?esc(A.sexe.replace("Un ","").replace("Une ","").replace(/^./,c=>c.toUpperCase())):fmt(null)],
+      ["Naissance",`${dn}${ag!=null?` (${ag} ans)`:""}`],["Profession",fmt(A.profession)],
+      ["Poids · Taille",`<b>${A.poids?esc(A.poids)+" kg":"—"} · ${A.taille?esc(A.taille)+" cm":"—"}</b>`],["IMC",m?m.toFixed(1).replace(".",",")+" kg/m²":fmt(null),m?"im":""]]))}
+    ${card("Consultation",xkv(cons))}</div>
+    ${card("Synthèse clinique",synthese(),"pk")}</div></div>`);
+  // 2. Scores (compacts) | horaires et temps de sommeil
+  const tiles=[`<div><b>Epworth</b><strong>${e.n?e.s:"—"} / 24</strong><span>${e.n?epwInt(e.s):""}</span>${part(e)}</div>`,
+    `<div><b>ISI</b><strong>${i.n?i.s:"—"} / 28</strong><span>${i.n?isiInt(i.s):""}</span>${part(i)}</div>`,
+    `<div><b>Hamilton</b><strong>${h.n?h.s:"—"} / 68</strong><span>item 3 : ${A.h3??"—"}</span>${part(h)}</div>`];
+  if(bsh) tiles.push(`<div><b>BOSS</b><strong>${bo.ok?bo.s:"—"} / 8</strong><span>${bo.ok?(bo.s>=3?"risque d’accident":"pas de risque identifié"):""}</span>${bo.ok?"":`<i>incomplet : ${bo.n}/4</i>`}</div>`);
   const st=sleepTimes(), hor=(c,l,d)=>c||l ? `<b>${fmt(c)} → ${fmt(l)}</b>${d!=null?`<em>${fmtDur(d)}</em>`:""}` : `<b>${fmt(null)}</b>`;
-  B.push(`<div class="rb"><h4>Horaires et temps de sommeil</h4><div class="hz">
-    <div><small>En semaine · coucher → lever</small>${hor(A.couch_sem,A.lever_sem,st.s)}</div>
-    <div><small>Week-end · coucher → lever</small>${hor(A.couch_we,A.lever_we,st.w)}</div>
-    <div class="tst"><small>Temps de sommeil moyen estimé</small><b>${st.moy!=null?fmtDur(st.moy):"—"}</b>${st.s!=null&&st.w!=null?`<em>5 j sem. + 2 j WE</em>`:""}</div></div></div>`);
-  B.push(`<div class="rb"><h4>Votre sommeil</h4>${sp([
-    ["Ronflement",fmt(A.ronfle),A.ronfle==="Oui, fortement"||A.ronfle==="Oui, légèrement"],["Arrêts respiratoires constatés",fmt(A.apnees),A.apnees==="Oui"],["Réveils avec étouffement",fmt(A.etouff),A.etouff==="Oui"],
-    ["Sommeil réparateur",fmt(A.repar),A.repar==="Non"],["Au réveil",fmt(A.reveil),!no(A.reveil)&&!(A.reveil||[]).includes("Aucun")],["Nycturie",fmt(A.nycturie),A.nycturie==="2 fois"||A.nycturie==="3 fois ou plus"]])}</div>`);
+  B.push(`<div class="rb xrow" style="grid-template-columns:0.95fr 1.25fr">
+    ${card("Scores principaux",`<div class="xsc" style="grid-template-columns:repeat(${tiles.length===4?2:3},1fr)">${tiles.join("")}</div>`)}
+    ${card("Horaires et temps de sommeil",`<div class="xhz"><div><small>En semaine · coucher → lever</small>${hor(A.couch_sem,A.lever_sem,st.s)}</div>
+      <div><small>Week-end · coucher → lever</small>${hor(A.couch_we,A.lever_we,st.w)}</div>
+      <div class="tst"><small>Temps de sommeil moyen estimé</small><b>${st.moy!=null?fmtDur(st.moy):"—"}</b>${st.s!=null&&st.w!=null?`<em>5 j sem. + 2 j WE</em>`:""}</div></div>`)}</div>`);
+  // 3. Votre sommeil | antécédents et traitements
   const atcdOk=!no(A.atcd)&&!(A.atcd||[]).includes("Aucune"), traiteOk=!no(A.traite)&&!(A.traite||[]).includes("Non");
   const psy = A.ttt==="Oui" ? `<b>OUI</b>${A.ttt_detail?" – "+esc(A.ttt_detail):" (non précisé)"}` : A.ttt==="Non" ? "<b>NON</b>" : fmt(null);
-  B.push(`<div class="rb"><h4>Antécédents et traitements</h4><div class="psy${A.ttt==="Oui"?" on":""}">💊 Psychotropes / morphiniques (somnifère, anxiolytique, antidépresseur, opioïde) : ${psy}</div>${sp([
-    ["Maladies",fmt(A.atcd),atcdOk],
-    ["Antécédents familiaux d’apnée du sommeil",fmt(A.atcdfam)+(A.atcdfam==="Oui"&&A.atcdfam_detail?" : "+esc(A.atcdfam_detail):""),A.atcdfam==="Oui"],
-    ["Examen du sommeil antérieur",fmt(A.examen)+(A.examen_detail?" ("+esc(A.examen_detail)+")":""),A.examen==="Polygraphie"||A.examen==="Polysomnographie"],
-    ...(A.examen==="Non"?[]:[["Traitement antérieur du SAOS",fmt(A.traite)+(A.traite_autre?" ("+esc(A.traite_autre)+")":""),traiteOk]])])}</div>`);
-  const bo=boss();
-  B.push(`<div class="rb"><h4>Somnolence et conduite</h4>${sp([
+  B.push(`<div class="rb xrow" style="grid-template-columns:1.15fr 1fr">
+    ${card("Votre sommeil",sp([
+      ["Ronflement",fmt(A.ronfle),A.ronfle==="Oui, fortement"||A.ronfle==="Oui, légèrement"],["Arrêts respiratoires constatés",fmt(A.apnees),A.apnees==="Oui"],["Réveils avec étouffement",fmt(A.etouff),A.etouff==="Oui"],
+      ["Sommeil réparateur",fmt(A.repar),A.repar==="Non"],["Au réveil",fmt(A.reveil),!no(A.reveil)&&!(A.reveil||[]).includes("Aucun")],["Nycturie",fmt(A.nycturie),A.nycturie==="2 fois"||A.nycturie==="3 fois ou plus"]]))}
+    ${card("Antécédents et traitements",`<div class="xpsy">💊 Psychotropes / morphiniques (somnifère, anxiolytique, antidépresseur, opioïde) : ${psy}</div>${sp([
+      ["Maladies",fmt(A.atcd),atcdOk],
+      ["ATCD familial d’apnée",fmt(A.atcdfam)+(A.atcdfam==="Oui"&&A.atcdfam_detail?" — "+esc(A.atcdfam_detail):""),A.atcdfam==="Oui"],
+      ["Examen du sommeil antérieur",fmt(A.examen)+(A.examen_detail?" ("+esc(A.examen_detail)+")":""),A.examen==="Polygraphie"||A.examen==="Polysomnographie"],
+      ...(A.examen==="Non"?[]:[["Traitement antérieur du SAOS",fmt(A.traite)+(A.traite_autre?" ("+esc(A.traite_autre)+")":""),traiteOk]])])}`)}</div>`);
+  // 4. Somnolence et conduite (pleine largeur) : score BOSS en avant, ses items en petit
+  const pts=(arr,v)=>arr.indexOf(v)>=0?arr.indexOf(v):"—";
+  const bossBox = bsh ? `<div class="xboss"><span>Score BOSS (somnolence au volant)</span><b>${bo.ok?bo.s:"—"} / 8</b><span class="i">${bo.ok?(bo.s>=3?"risque d’accident lié à la somnolence (seuil ≥ 3)":"pas de risque identifié (seuil ≥ 3)"):`incomplet (${bo.n}/4)`}</span>
+    <small>${A.sexe?(A.sexe==="Un homme"?"Homme : 1":"Femme : 0"):"Sexe : —"} · ${A.boss_km?esc(A.boss_km)+" : "+pts(BOSS_KM,A.boss_km):"Kilométrage : —"} · somnole en voiture immobilisée${A.boss_immo?" ("+esc(lcf(A.boss_immo))+")":""} : ${pts(BOSS_IMMO,A.boss_immo)} · épisode au volant dans l’année${A.boss_epi?" ("+esc(lcf(A.boss_epi))+")":""} : ${pts(BOSS_EPI,A.boss_epi)}</small></div>` : "";
+  B.push(`<div class="rb">${card("Somnolence et conduite",bossBox+sp([
     ["Lutte contre le sommeil au volant",fmt(A.lutte),A.lutte==="Régulièrement"],
     ["Accident / quasi-accident par endormissement",fmt(A.accident),A.accident==="Oui"],
-    ["Conduite professionnelle",fmt(A.conduitepro)+(A.conduitepro==="Oui"&&A.conduitepro_detail?" ("+esc(A.conduitepro_detail)+")":""),A.conduitepro==="Oui"],
-    ...(bossShown()?[["Score BOSS (somnolence au volant)",bo.ok?`${bo.s} / 8${bo.s>=3?" – risque d’accident":""}`:`incomplet (${bo.n}/4)`,bo.ok&&bo.s>=3],
-      ["Kilométrage annuel",fmt(A.boss_km),A.boss_km===BOSS_KM[1]],
-      ["Somnole en voiture immobilisée",fmt(A.boss_immo),BOSS_IMMO.indexOf(A.boss_immo)>=2],
-      ["Épisode de somnolence au volant (12 mois)",fmt(A.boss_epi),BOSS_EPI.indexOf(A.boss_epi)>=1]]:[])])}</div>`);
+    ["Conduite professionnelle",fmt(A.conduitepro)+(A.conduitepro==="Oui"&&A.conduitepro_detail?" ("+esc(A.conduitepro_detail)+")":""),A.conduitepro==="Oui"]]))}</div>`);
   B.push(`<div class="rb p2"><h4>Échelle de somnolence d’Epworth</h4><table class="rt"><tr><th>Situation</th>${[0,1,2,3].map(v=>`<th>${v}</th>`).join("")}</tr>
     ${EPW.map((t,j)=>`<tr class="${A["ep"+(j+1)]===undefined?"na":""}"><td>${t}</td>${circ("ep"+(j+1),3)}</tr>`).join("")}</table>
     <div class="rtot">Total : ${e.n?e.s:"—"} / 24 ${e.n?"– "+epwInt(e.s):""}</div></div>`);
@@ -1538,7 +1572,7 @@ async function buildPages(){
   const blocks=reportBlocks(); const pages=[];
   const nom = esc(A.nom||"");
   const newPage=()=>{ const p=document.createElement("div"); p.className="rpage";
-    p.innerHTML=`<div class="rhead"><img src="${IMG.pmbsmall}"><div class="m"><b>Livret de questionnaires avant consultation</b><span>${CABINET.medecin}</span></div><img class="ap" src="${IMG.ap}" alt=""><div class="p">${nom}<br><span class="pn"></span></div></div><div class="rbody"></div><div class="rfoot"><span>Document rempli en ligne par le patient le ${new Date().toLocaleDateString("fr-FR")} – ne remplace pas une consultation médicale.</span><span class="pn2"></span></div>`;
+    p.innerHTML=`<div class="rhead"><img src="${IMG.pmbsmall}"><div class="sep"></div><div class="m"><b>${CABINET.nom.split(" – ")[0]}</b><span>${CABINET.medecin}</span></div><div class="p"><b>${nom}</b><br>${new Date().toLocaleDateString("fr-FR")}</div><img class="ap" src="${IMG.ap}" alt=""></div><div class="rbody"></div><div class="rfoot"><span>Document rempli en ligne par le patient le ${new Date().toLocaleDateString("fr-FR")} – ne remplace pas une consultation médicale.</span><span class="pn2"></span></div>`;
     R.appendChild(p); pages.push(p); return $(".rbody",p); };
   // Page 1 : tout le recueil ; page 2 : les grilles Epworth, ISI, Hamilton. Toujours 2 pages.
   const els=blocks.map(html=>{ const d=document.createElement("div"); d.innerHTML=html; return d.firstElementChild; });
@@ -1550,7 +1584,7 @@ async function buildPages(){
       s=Math.round((s-0.02)*100)/100; fit.style.width=(100/s)+"%"; fit.style.transform=`scale(${s})`;
     }
   }
-  pages.forEach((p,j)=>{ $(".pn",p).textContent=`Page ${j+1} / ${pages.length}`; });
+  pages.forEach((p,j)=>{ $(".pn2",p).textContent=`Page ${j+1} / ${pages.length}`; });
   return pages;
 }
 let pdfBlob=null, pdfName="";
